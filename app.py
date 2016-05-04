@@ -42,7 +42,7 @@ def checkPassword(passwrd, hashedPass):
 	return hashedPass.encode() == bcrypt.hashpw(passwrd.encode(), hashedPass.encode())
 
 def createDBConnection():
-con = None
+	con = None
 	try:
 		con = psycopg2.connect(database='AppDB', user='admin-gentry')
 		print "connected to the DB successfully"
