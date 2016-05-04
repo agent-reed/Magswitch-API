@@ -18,7 +18,7 @@ class User:
 			self.salesperson = salesperson
 			self.admin = admin
 			self.psswrd = psswrd
-			print("psswrd")
+
 			print("New user created: " + self.firstName + " " + self.lastName)
 
 		except:
@@ -157,11 +157,17 @@ def checkLogin():
 		results = cur.fetchone()
 		validCredentials = False
 
+		print(results[0])
+		print(results[1])
+		print(results[:])
+
 		try:
 			print("trying")
 			if checkPassword(psswrd_attempt, results[0]):
 				validCredentials = True
 				print("Loged in successfully")
+			else:
+				print("checkPassword didn't return true")
 
 		except:
 			print("something broke")
