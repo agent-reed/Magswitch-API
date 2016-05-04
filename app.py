@@ -150,7 +150,7 @@ def checkLogin():
 		cur = con.cursor()
 		print("created cursor")
 
-		sql = "SELECT psswrd FROM users WHERE \"email\" = '%s'"
+		sql = "SELECT psswrd FROM users WHERE \"email\" = %s"
 		cur.execute(sql, (email))
 		print("executed selection")
 		results = cur.fetchone()
