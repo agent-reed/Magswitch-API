@@ -17,7 +17,7 @@ class User:
 			self.salesperson = salesperson
 			self.admin = admin
 			print("creating hash")
-			self.psswrd = hashpw(password.encode('utf-8', bcrypt.gensalt(5)))
+			self.psswrd = hashPassword(psswrd)
 
 		except:
 			print("Unexpected error:", sys.exc_info()[0])
@@ -34,6 +34,9 @@ class Bug:
 		self.device = device	
 		print("new bug found")
 
+
+def hashPassword(psswrd):
+    return bcrypt.hashpw(psswrd.encode(), bcrypt.gensalt())
 
 con = None
 def createDBConnection():
