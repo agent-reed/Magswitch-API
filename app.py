@@ -108,9 +108,9 @@ def createUser():
 		salesperson = request.form['salesperson']
 		admin = request.form['admin']
 		psswrd = request.form['psswrd']
-
+		print("Hashing")
 		hashed = hashPassword(psswrd)
-
+		print("Hashed")
 		newUser = User(firstName,lastName,email,distributor,salesperson,admin,psswrd)
 		addUserToDB(newUser)
 
