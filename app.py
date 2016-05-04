@@ -37,7 +37,7 @@ class Bug:
 
 
 def hashPassword(psswrd):
-	return bcrypt.hashpw(psswrd, bcrypt.gensalt())
+	return bcrypt.hashpw(psswrd.encode, bcrypt.gensalt().encode)
 
 def checkPassword(passwrd, hashedPass):
 	return hashedPass.encode() == bcrypt.hashpw(passwrd.encode(), hashedPass.encode())
