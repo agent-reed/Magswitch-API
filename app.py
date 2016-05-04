@@ -158,11 +158,11 @@ def checkLogin():
 		validCredentials = False
 
 		print "Attempt: " + psswrd_attempt
-		print "Hash: " + results["psswrd"]
+		print "Hash: " + results
 
 		try:
 			print("trying")
-			if checkPassword(psswrd_attempt, results["psswrd"]):
+			if checkPassword(psswrd_attempt, results):
 				validCredentials = True
 				print("Loged in successfully")
 
