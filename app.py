@@ -150,13 +150,15 @@ def checkLogin():
 		cur = con.cursor()
 
 		cur.execute("SELECT psswrd, firstName FROM users WHERE email=%s", (email))
-
+		print("executed selection")
 		results = cur.fetchone()
+		print("Stored results")
 		validCredentials = False
 
 		try:
 			if checkPassword(psswrd_attempt, results["psswrd"]):
 				validCredentials = True
+				print("Loged in successfully")
 
 		except:
 			pass
