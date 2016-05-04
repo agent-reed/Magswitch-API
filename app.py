@@ -147,12 +147,12 @@ def checkLogin():
 		psswrd_attempt = request.form['psswrd_attempt']
 
 		con = createDBConnection()
-		cur = con.cursor
+		cur = con.cursor()
 
 		cur.execute("SELECT psswrd, firstName FROM users WHERE email=%s", (email))
 
 		results = cur.fetchone()
-		validCredentials =False
+		validCredentials = False
 
 		try:
 			if checkPassword(psswrd_attempt, results["psswrd"]):
