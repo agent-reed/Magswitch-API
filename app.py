@@ -10,13 +10,14 @@ class User:
 
 	def __init__(self, firstName, lastName, email, distributor, salesperson, admin, psswrd):
 		try:
+			print("trying to init user")
 			self.firstName = firstName
 			self.lastName = lastName
 			self.email = email
 			self.distributor = distributor
 			self.salesperson = salesperson
 			self.admin = admin
-			self.psswrd = hashed
+			self.psswrd = psswrd
 			print("psswrd")
 			print("New user created: " + self.firstName + " " + self.lastName)
 
@@ -107,6 +108,8 @@ def createUser():
 		salesperson = request.form['salesperson']
 		admin = request.form['admin']
 		psswrd = request.form['psswrd']
+
+		hashed = hashPassword(psswrd)
 
 		newUser = User(firstName,lastName,email,distributor,salesperson,admin,psswrd)
 		addUserToDB(newUser)
