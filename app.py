@@ -157,6 +157,9 @@ def checkLogin():
 		print("Stored results")
 		validCredentials = False
 
+		print "Attempt: " + psswrd_attempt
+		print "Hash: " + results["psswrd"]
+
 		try:
 			print("trying")
 			if checkPassword(psswrd_attempt, results["psswrd"]):
