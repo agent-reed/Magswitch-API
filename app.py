@@ -9,16 +9,22 @@ app = Flask(__name__)
 class User:
 
 	def __init__(self, firstName, lastName, email, distributor, salesperson, admin, psswrd):
-		self.firstName = firstName
-		self.lastName = lastName
-		self.email = email
-		self.distributor = distributor
-		self.salesperson = salesperson
-		self.admin = admin
-		print("creating hash")
-		self.psswrd = hashpw(password.encode('utf-8', bcrypt.gensalt(5)))
+		try:
+			self.firstName = firstName
+			self.lastName = lastName
+			self.email = email
+			self.distributor = distributor
+			self.salesperson = salesperson
+			self.admin = admin
+			print("creating hash")
+			self.psswrd = hashpw(password.encode('utf-8', bcrypt.gensalt(5)))
 
-		print("New user created: " + self.firstName + " " + self.lastName)
+		except:
+    		print "Unexpected error:", sys.exc_info()[0]
+
+    	finally:
+    		
+			print("New user created: " + self.firstName + " " + self.lastName)
 
 class Bug:
 
