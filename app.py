@@ -20,10 +20,10 @@ class User:
 			self.psswrd = hashpw(password.encode('utf-8', bcrypt.gensalt(5)))
 
 		except:
-    		print "Unexpected error:", sys.exc_info()[0]
+			print("Unexpected error:", sys.exc_info()[0])
+			raise
+		finally:
 
-    	finally:
-    		
 			print("New user created: " + self.firstName + " " + self.lastName)
 
 class Bug:
