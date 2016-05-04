@@ -140,7 +140,7 @@ def index():
 	print "Accessed the server"
 	return redirect('http://www.magswitch.com.au')
 
-@app.route('/login/')
+@app.route('/login/', methods=['POST'])
 def checkLogin():
 	if request.method == 'POST':
 		email = request.form['email']
@@ -165,6 +165,9 @@ def checkLogin():
 			return "Welcome!", status.HTTP_202_ACCEPTED
 		else:
 			return "", status.HTTP_401_UNAUTHORIZED
+
+	else :
+		return "Invalid Request Type"
 
 
 @app.route('/data/')
