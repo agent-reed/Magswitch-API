@@ -16,7 +16,7 @@ class User:
 		self.salesperson = salesperson
 		self.admin = admin
 		print("creating hash")
-		self.psswrd = hashpw(psswrd, gensalt())
+		self.psswrd = hashpw(password.encode('utf-8', bcrypt.gensalt(5))
 
 		print ("New user created: " + self.firstName + " " + self.lastName)
 
