@@ -133,8 +133,6 @@ def bugReport():
 	else:
 		return status.HTTP_405_METHOD_NOT_ALLOWED
 
-	
-
 @app.route('/')
 def index():
 	print "Accessed the server"
@@ -152,13 +150,14 @@ def checkLogin():
 		print(email)
 
 		cur.execute("SELECT psswrd FROM users WHERE \"email\" = %s", (email,))
-		print("executed selection")
+		
 		results = cur.fetchone()
-		print("Stored results")
 		validCredentials = False
 
-		print "Attempt: " + psswrd_attempt
-		print "Hash: " + results[0]
+		hashed = hashpw('abc', gensalt())
+
+		test = checkPassword('abc', hashed)
+		print(test)
 
 		try:
 			print("trying")
