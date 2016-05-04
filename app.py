@@ -151,7 +151,7 @@ def checkLogin():
 		print("created cursor")
 		print(email)
 
-		cur.execute("SELECT psswrd, firstName FROM users WHERE \"email\" = 'SP@secure.com'")
+		cur.execute("SELECT psswrd FROM users WHERE \"email\" = 'SP@secure.com'")
 		print("executed selection")
 		results = cur.fetchone()
 		print("Stored results")
