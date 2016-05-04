@@ -156,7 +156,7 @@ def checkLogin():
 
 		try:
 			if checkPassword(psswrd_attempt, results["psswrd"]):
-			validCredentials = True
+				validCredentials = True
 
 		except:
 			pass
