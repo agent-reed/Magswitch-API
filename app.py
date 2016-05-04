@@ -150,24 +150,28 @@ def checkLogin():
 		cur = con.cursor()
 		print("created cursor")
 
-		sql = "SELECT psswrd FROM users WHERE \"email\" = 'SP@secure.com'"
-		cur.execute(sql,email)
+		sql = 
+		cur.execute("SELECT psswrd FROM users WHERE \"email\" = '%s'", email)
 		print("executed selection")
 		results = cur.fetchone()
 		print("Stored results")
 		validCredentials = False
 
 		try:
+			print("trying")
 			if checkPassword(psswrd_attempt, results["psswrd"]):
 				validCredentials = True
 				print("Loged in successfully")
 
 		except:
+			print("something broke")
 			pass
 
 		if validCredentials:
+			print("Logged in fine")
 			return "Welcome!", status.HTTP_202_ACCEPTED
 		else:
+			print("bad password")
 			return "", status.HTTP_401_UNAUTHORIZED
 
 	else :
