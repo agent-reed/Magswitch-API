@@ -18,7 +18,7 @@ class User:
 		print("creating hash")
 		self.psswrd = hashpw(password.encode('utf-8', bcrypt.gensalt(5))
 
-		print ("New user created: " + self.firstName + " " + self.lastName)
+		print("New user created: " + self.firstName + " " + self.lastName)
 
 class Bug:
 
