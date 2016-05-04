@@ -150,8 +150,8 @@ def checkLogin():
 		cur = con.cursor()
 		print("created cursor")
 
-		sql = "SELECT psswrd, firstName FROM users WHERE email=%(email)s"
-		cur.execute(sql, { 'email': email })
+		sql = "SELECT * FROM users"
+		cur.execute(sql)
 		print("executed selection")
 		results = cur.fetchone()
 		print("Stored results")
@@ -197,6 +197,5 @@ def names():
 		sys.exit(1)
 
 if __name__ == '__main__':
-	app.debug = True
-	app.run()
+	app.run(DEBUG=True)
 
