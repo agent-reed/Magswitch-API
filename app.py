@@ -16,15 +16,16 @@ class User:
 			self.distributor = distributor
 			self.salesperson = salesperson
 			self.admin = admin
-			self.psswrd = hashPassword(psswrd)
+			hashed = hashPassword(psswrd)
+			self.psswrd = hashed
 			print("psswrd")
+			print("New user created: " + self.firstName + " " + self.lastName)
 
 		except:
 			print("Unexpected error:", sys.exc_info()[0])
 			raise
-		finally:
 
-			print("New user created: " + self.firstName + " " + self.lastName)
+			
 
 class Bug:
 
