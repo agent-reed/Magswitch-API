@@ -1,32 +1,31 @@
 from flask import Flask, jsonify, request, redirect
 import psycopg2
 from prettytable import PrettyTable
+import bcrypt
+from bcrypt import hashpw, gensalt
 
 app = Flask(__name__)
 
 class User:
 
-    def __init__(self, name, psswrd, email, distributor, salesperson):
-        self.name = name
-        self.psswrd = psswrd
-        self.email = email
-        self.distributor = distributor
-        self.salesperson = salesperson
-        self.favorites = [] 
+	def __init__(self, firstName, lastName, email, distributor, salesperson, admin, psswrd):
+		self.firstName = firstName
+		self.lastName = lastName
+		self.email = email
+		self.distributor = distributor
+		self.salesperson = salesperson
+		self.admin = admin
+		self.psswrd = hashpw(psswrd, gensalt())
 
-        print ("new user created: " + self.name)
-
-    def add_favorite(self, trick):
-        self.favorites.append(favorite)
+		print ("New user created: " + self.firstName + " " + self.lastName)
 
 class Bug:
 
-    def __init__(self, description, date, device):
-        self.description = description
-        self.date = date
-        self.device = device
-
-        print("new bug found")
+	def __init__(self, description, date, device):
+		self.description = description
+		self.date = date
+		self.device = 		
+		print("new bug found")
 
 
 con = None
@@ -47,9 +46,9 @@ def addUserToDB(newUser):
 
 	try:
 		cur = con.cursor()
-		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s)", (newUser.name, newUser.psswrd, newUser.email, newUser.distributor, newUser.salesperson))
+		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s)", (newUser.firstName, newUser.lastName, newUser.email, newUser.distributor, newUser.salesperson, newUser.admin, newUser.psswrd))
 		con.commit()
-		print ("Added '" + name + " to the database.")
+		print ("Added '" + newUser.firstName + " to the database.")
 
 	except psycopg2.DatabaseError as e:
 
@@ -88,14 +87,16 @@ def addBugToDB(newBug):
 def createUser():
 	if request.method == 'POST':
 
-		name = request.form['username']
-		psswrd = request.form['psswrd']
+		print("Recived a POST request")
+		firstName = request.form['firstName']
+		lastName = request.form['lastName']
 		email = request.form['email']
 		distributor = request.form['distributor']
 		salesperson = request.form['salesperson']
-		print "processed form"
+		admin = request.form['admin']
+		psswrd = request.form['psswrd']
 
-		newUser = User(name,psswrd,email,distributor,salesperson)
+		newUser = User(firstName,lastName,email,distributor,salesperson,admin,psswrd)
 		addUserToDB(newUser)
 
 		return 'Created A User'
@@ -157,7 +158,7 @@ def names():
 	try:
 		cur = con.cursor()
 		cur.execute("SELECT * FROM users")
-		t = PrettyTable(['|______First Name______|', '|______Last Name______|', '|________.Email._________|', '|___.Distributor.___|', '|___.Salesperson.__|'])
+		t = PrettyTable(['|______First Name______|', '|______Last Name______|', '|________.Email._________|', '|___Distributor___|', '|___Salesperson__|'])
 		for record in cur:
 			t.add_row([record[0],record[1],record[2],record[3],record[4]])
 		return t.get_html_string()
