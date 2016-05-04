@@ -147,12 +147,11 @@ def checkLogin():
 		psswrd_attempt = request.form['psswrd_attempt']
 
 		con = createDBConnection()
-		print("created connection to DB")
 		cur = con.cursor()
 		print("created cursor")
 
-		sql = "SELECT psswrd, firstName FROM users WHERE email=%s"
-		cur.execute(sql, (email))
+		sql = "SELECT psswrd, firstName FROM users WHERE email=%(email)s"
+		cur.execute(sql, { 'email': email })
 		print("executed selection")
 		results = cur.fetchone()
 		print("Stored results")
