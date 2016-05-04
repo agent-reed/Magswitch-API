@@ -110,7 +110,7 @@ def createUser():
 
 		psswrd = request.form['psswrd']
 		hashed = hashPassword(psswrd)
-		
+
 		newUser = User(firstName,lastName,email,distributor,salesperson,admin,hashed)
 		addUserToDB(newUser)
 
@@ -173,10 +173,10 @@ def checkLogin():
 
 		if validCredentials:
 			print("Logged in fine")
-			return "Welcome!", status.HTTP_202_ACCEPTED
+			return "Welcome!"
 		else:
 			print("bad password")
-			return "", status.HTTP_401_UNAUTHORIZED
+			return "Unauthorized"
 
 	else :
 		return "Invalid Request Type"
