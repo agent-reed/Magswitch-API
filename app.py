@@ -141,7 +141,7 @@ def index():
 	return redirect('http://www.magswitch.com.au')
 
 @app.route('/login/')
-def checkLogin:
+def checkLogin():
 	if request.method == 'POST':
 		email = request.form['email']
 		psswrd_attempt = request.form['psswrd_attempt']
