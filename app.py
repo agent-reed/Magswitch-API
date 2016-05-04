@@ -15,6 +15,7 @@ class User:
 		self.distributor = distributor
 		self.salesperson = salesperson
 		self.admin = admin
+		print("creating hash")
 		self.psswrd = hashpw(psswrd, gensalt())
 
 		print ("New user created: " + self.firstName + " " + self.lastName)
