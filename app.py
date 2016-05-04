@@ -111,7 +111,7 @@ def createUser():
 		print("Hashing")
 		hashed = hashPassword(psswrd)
 		print("Hashed")
-		newUser = User(firstName,lastName,email,distributor,salesperson,admin,psswrd)
+		newUser = User(firstName,lastName,email,distributor,salesperson,admin,hashed)
 		addUserToDB(newUser)
 
 		return 'Created A User'
@@ -158,8 +158,6 @@ def checkLogin():
 		validCredentials = False
 
 		print(results[0])
-		print(results[1])
-		print(results[:])
 
 		try:
 			print("trying")
