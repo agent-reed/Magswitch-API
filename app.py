@@ -36,11 +36,13 @@ class Bug:
 
 
 def hashPassword(psswrd):
-    return bcrypt.hashpw(psswrd.encode(), bcrypt.gensalt())
+	return bcrypt.hashpw(psswrd.encode(), bcrypt.gensalt())
 
-con = None
+def checkPassword(passwrd, hashedPass):
+	return hashedPass.encode() == bcrypt.hashpw(passwrd.encode(), hashedPass.encode())
+
 def createDBConnection():
-
+con = None
 	try:
 		con = psycopg2.connect(database='AppDB', user='admin-gentry')
 		print "connected to the DB successfully"
@@ -138,27 +140,32 @@ def index():
 	print "Accessed the server"
 	return redirect('http://www.magswitch.com.au')
 
+@app.route('/login/')
+def checkLogin:
+	if request.method == 'POST':
+		email = request.form['email']
+		psswrd_attempt = request.form['psswrd_attempt']
 
-@app.route('/test')
-def testConnect():
-		
-	try:
 		con = createDBConnection()
-		cur = con.cursor()
-		cur.execute('SELECT version()')          
-		ver = cur.fetchone()
-		print ver    
+		cur = con.cursor
 
-	except psycopg2.DatabaseError, e:
-		print 'Error %s' % e    
-		sys.exit(1)
+		cur.execute("SELECT psswrd, firstName FROM users WHERE email=%s", (email))
 
-	finally:
+		results = cur.fetchone()
+		validCredentials =False
 
-		if con:
-			con.close()	
-    
-    
+		try:
+			if checkPassword(psswrd_attempt, results["psswrd"]):
+			validCredentials = True
+
+		except:
+			pass
+
+		if validCredentials:
+			return "Welcome!", status.HTTP_202_ACCEPTED
+		else:
+			return "", status.HTTP_401_UNAUTHORIZED
+
 
 @app.route('/data/')
 def names():
@@ -170,7 +177,7 @@ def names():
 		cur.execute("SELECT * FROM users")
 		t = PrettyTable(['|______First Name______|', '|______Last Name______|', '|________.Email._________|', '|___Distributor___|', '|___Salesperson__|'])
 		for record in cur:
-			t.add_row([record[0],record[1],record[2],record[3],record[4]])
+			t.add_row([record[0],record[1],record[2],record[3],record[4],record[5]])
 		return t.get_html_string()
 		 
 
@@ -181,8 +188,6 @@ def names():
 
 		print "Error displaying the users." + e
 		sys.exit(1)
-
-
 
 if __name__ == '__main__':
 	app.debug = True
