@@ -18,7 +18,7 @@ class User:
 			self.salesperson = salesperson
 			self.admin = admin
 			self.psswrd = psswrd
-
+			print("User Created with Hash:" + psswrd)
 			print("New user created: " + self.firstName + " " + self.lastName)
 
 		except:
@@ -107,10 +107,10 @@ def createUser():
 		distributor = request.form['distributor']
 		salesperson = request.form['salesperson']
 		admin = request.form['admin']
+
 		psswrd = request.form['psswrd']
-		print("Hashing")
 		hashed = hashPassword(psswrd)
-		print("Hashed")
+		
 		newUser = User(firstName,lastName,email,distributor,salesperson,admin,hashed)
 		addUserToDB(newUser)
 
