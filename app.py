@@ -16,7 +16,6 @@ class User:
 			self.distributor = distributor
 			self.salesperson = salesperson
 			self.admin = admin
-			hashed = hashPassword(psswrd)
 			self.psswrd = hashed
 			print("psswrd")
 			print("New user created: " + self.firstName + " " + self.lastName)
