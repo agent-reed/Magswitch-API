@@ -149,7 +149,7 @@ def checkLogin():
 		con = createDBConnection()
 		cur = con.cursor()
 		print("created cursor")
-
+		print(email)
 		cur.execute("SELECT psswrd, firstName FROM users WHERE \"email\" = %s", email)
 		print("executed selection")
 		results = cur.fetchone()
