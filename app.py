@@ -24,7 +24,7 @@ class Bug:
 	def __init__(self, description, date, device):
 		self.description = description
 		self.date = date
-		self.device = 		
+		self.device = device	
 		print("new bug found")
 
 
