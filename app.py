@@ -16,8 +16,8 @@ class User:
 			self.distributor = distributor
 			self.salesperson = salesperson
 			self.admin = admin
-			print("creating hash")
 			self.psswrd = hashPassword(psswrd)
+			print("psswrd")
 
 		except:
 			print("Unexpected error:", sys.exc_info()[0])
@@ -36,7 +36,7 @@ class Bug:
 
 
 def hashPassword(psswrd):
-	return bcrypt.hashpw(psswrd.encode(), bcrypt.gensalt())
+	return bcrypt.hashpw(psswrd, bcrypt.gensalt())
 
 def checkPassword(passwrd, hashedPass):
 	return hashedPass.encode() == bcrypt.hashpw(passwrd.encode(), hashedPass.encode())
@@ -153,11 +153,6 @@ def checkLogin():
 		
 		results = cur.fetchone()
 		validCredentials = False
-
-		hashed = hashpw('abc', gensalt())
-
-		test = checkPassword('abc', hashed)
-		print(test)
 
 		try:
 			print("trying")
