@@ -163,12 +163,10 @@ def checkLogin():
 			print("trying")
 			if checkPassword(psswrd_attempt, results[0]):
 				validCredentials = True
-				print("Loged in successfully")
 			else:
 				print("checkPassword didn't return true")
 
 		except:
-			print("something broke")
 			pass
 
 		if validCredentials:
@@ -190,9 +188,9 @@ def names():
 	try:
 		cur = con.cursor()
 		cur.execute("SELECT * FROM users")
-		t = PrettyTable(['|______First Name______|', '|______Last Name______|', '|________.Email._________|', '|___Distributor___|', '|___Salesperson__|'])
+		t = PrettyTable(['|______First Name______|', '|______Last Name______|', '|________.Email._________|', '|___Distributor___|', '|___Salesperson__|', '|____Admin___|', '|__________hash__________|'])
 		for record in cur:
-			t.add_row([record[0],record[1],record[2],record[3],record[4],record[5]])
+			t.add_row([record[0],record[1],record[2],record[3],record[4],record[5], record[6]])
 		return t.get_html_string()
 		 
 
