@@ -154,6 +154,7 @@ def index():
 	print "Accessed the server"
 	return redirect('http://www.magswitch.com.au')
 
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 @app.route('/login/', methods=['GET','POST'])
 def checkLogin():
 	if request.method == 'GET':
@@ -184,6 +185,7 @@ def checkLogin():
 			if checkPassword(psswrd_attempt, results[0]):
 				validCredentials = True
 				createSession(results[1])
+				print("created session")
 			else:
 				print("checkPassword didn't return true")
 
