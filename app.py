@@ -159,7 +159,7 @@ app.secret_key = '087c38712m]43jvdsp[ew'
 def checkLogin():
 	if request.method == 'GET':
 		if isLoggedin():
-			return "True"
+			return session["userID"]
 		else:
 			return "False"
 
