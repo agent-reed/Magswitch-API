@@ -158,8 +158,9 @@ app.secret_key = '087c38712m]43jvdsp[ew'
 @app.route('/login/', methods=['GET','POST'])
 def checkLogin():
 	if request.method == 'GET':
+		
 		if isLoggedin():
-			return session["userID"]
+			return "True"
 		else:
 			return "False"
 
@@ -204,9 +205,9 @@ def checkLogin():
 
 @app.route("/logout/", methods=["GET"])
 def removeSession():
-    session["loggedin"] = False
-    session.clear()
-    return "Logged Out"
+	session["loggedin"] = False
+	session.clear()
+	return "Logged Out"
 
 
 
