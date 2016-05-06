@@ -69,7 +69,6 @@ def addUserToDB(newUser):
 
 	try:
 		cur = con.cursor()
-
 		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
 		print("Selct Executed")
 		lastUserID = cur.fetchone()
@@ -138,8 +137,6 @@ def createUser():
 @app.route('/bug/', methods=['POST'])
 def bugReport():
 	if request.method == 'POST':
-		print "Recieved Request"
-	
 		description = request.form['description']
 		date = request.form['date']
 		device = request.form['device']
@@ -157,8 +154,15 @@ def index():
 	print "Accessed the server"
 	return redirect('http://www.magswitch.com.au')
 
-@app.route('/login/', methods=['POST'])
+@app.route('/login/', methods=['GET','POST'])
 def checkLogin():
+	if request.method == 'GET':
+		if isLoggedin():
+			return "True"
+		else
+			return "False"
+
+
 	if request.method == 'POST':
 		email = request.form['email']
 		psswrd_attempt = request.form['psswrd_attempt']
@@ -168,17 +172,18 @@ def checkLogin():
 		print("created cursor")
 		print(email)
 
-		cur.execute("SELECT psswrd FROM users WHERE \"email\" = %s", (email,))
+		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 		
 		results = cur.fetchone()
 		validCredentials = False
 
 		print(results[0])
+		print(results[1])
 
 		try:
-			print("trying")
 			if checkPassword(psswrd_attempt, results[0]):
 				validCredentials = True
+				createSession(results[1])
 			else:
 				print("checkPassword didn't return true")
 
