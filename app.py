@@ -159,7 +159,7 @@ def checkLogin():
 	if request.method == 'GET':
 		if isLoggedin():
 			return "True"
-		else
+		else:
 			return "False"
 
 
