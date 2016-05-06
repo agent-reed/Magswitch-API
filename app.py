@@ -154,7 +154,7 @@ def index():
 	print "Accessed the server"
 	return redirect('http://www.magswitch.com.au')
 
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+app.secret_key = '087c38712m]43jvdsp[ew'
 @app.route('/login/', methods=['GET','POST'])
 def checkLogin():
 	if request.method == 'GET':
@@ -201,6 +201,13 @@ def checkLogin():
 
 	else :
 		return "Invalid Request Type"
+
+@app.route("/logout/", methods=["GET"])
+def removeSession():
+    session["loggedin"] = False
+    session.clear()
+    return "Logged Out"
+
 
 
 if __name__ == '__main__':
