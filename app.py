@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, session, request, redirect
 import psycopg2
 from prettytable import PrettyTable
 import bcrypt
@@ -10,7 +10,6 @@ class User:
 
 	def __init__(self, firstName, lastName, email, distributor, salesperson, admin, psswrd):
 		try:
-			print("trying to init user")
 			self.firstName = firstName
 			self.lastName = lastName
 			self.email = email
@@ -18,14 +17,11 @@ class User:
 			self.salesperson = salesperson
 			self.admin = admin
 			self.psswrd = psswrd
-			print("User Created with Hash:" + psswrd)
 			print("New user created: " + self.firstName + " " + self.lastName)
 
 		except:
 			print("Unexpected error:", sys.exc_info()[0])
 			raise
-
-			
 
 class Bug:
 
@@ -35,6 +31,20 @@ class Bug:
 		self.device = device	
 		print("new bug found")
 
+def isLoggedin():
+	try:
+		if session["loggedin"] == True:
+			return True
+		else:
+			return False
+
+	except:
+		return False
+
+# create the vars that we use for the sessions
+def createSession(userID):
+	session["loggedin"] = True
+	session["userID"] = userID
 
 def hashPassword(psswrd):
 	return bcrypt.hashpw(psswrd.encode(), bcrypt.gensalt().encode())
@@ -59,7 +69,13 @@ def addUserToDB(newUser):
 
 	try:
 		cur = con.cursor()
-		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s)", (newUser.firstName, newUser.lastName, newUser.email, newUser.distributor, newUser.salesperson, newUser.admin, newUser.psswrd))
+
+		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
+		print("Selct Executed")
+		lastUserID = cur.fetchone()
+		print(lastUserID[0])
+		nextUserID = lastUserID[0] + 1
+		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (newUser.firstName, newUser.lastName, newUser.email, newUser.distributor, newUser.salesperson, newUser.admin, newUser.psswrd, nextUserID))
 		con.commit()
 		print ("Added '" + newUser.firstName + " to the database.")
 
@@ -179,28 +195,6 @@ def checkLogin():
 	else :
 		return "Invalid Request Type"
 
-
-@app.route('/data/')
-def names():
-	
-	con = createDBConnection()
-
-	try:
-		cur = con.cursor()
-		cur.execute("SELECT * FROM users")
-		t = PrettyTable(['|______First Name______|', '|______Last Name______|', '|________.Email._________|', '|___Distributor___|', '|___Salesperson__|', '|____Admin___|', '|__________hash__________|'])
-		for record in cur:
-			t.add_row([record[0],record[1],record[2],record[3],record[4],record[5], record[6]])
-		return t.get_html_string()
-		 
-
-	except psycopg2.DatabaseError as e:
-
-		if con:
-			con.rollback
-
-		print "Error displaying the users." + e
-		sys.exit(1)
 
 if __name__ == '__main__':
 	app.run(DEBUG=True)
