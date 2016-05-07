@@ -162,7 +162,14 @@ def checkLogin():
 		if isLoggedin():
 			return "True"
 		else:
-			return "False"
+			return '''
+	
+					<form action = "" method = "post">
+					<p><input type = text name = email/></p>
+					<p<<input type = submit value = Login/></p>
+					</form>
+	
+					'''
 
 
 	if request.method == 'POST':
