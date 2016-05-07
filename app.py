@@ -165,9 +165,9 @@ def checkLogin():
 			return '''
 	
 					<form action = "" method = "post">
-						<p>Email: <input type = text name = email/></p>
-						<p>Password: <input type = text name = psswrd_attempt/></p>
-						<p><input type = submit value = Login></p>
+						<p>Email: <input type ="text" name ="email" /></p>
+						<p>Password: <input type ="text" name ="psswrd_attempt" /></p>
+						<p><input type ="submit" value = "Login" /></p>
 					</form>
 	
 					'''
