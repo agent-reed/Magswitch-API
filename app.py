@@ -223,10 +223,10 @@ def favorite():
 			userID = str(session["userID"])
 
 			con = createDBConnection()
-			cur = con.cursor
+			cur = con.cursor()
 			print("About to execute")
-			email = "mreed@magswitch.com.au"
-			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
+			
+			cur.execute("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
 			print("executed")
 			results = cur.fetchone()
 			print("fetched")
