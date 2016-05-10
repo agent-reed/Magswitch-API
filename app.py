@@ -221,20 +221,39 @@ def favorite():
 	if request.method == 'GET':
 		if isLoggedin():
 			userID = str(session["userID"])
-
 			con = createDBConnection()
 			cur = con.cursor()
 			print("About to execute")
-			
 			cur.execute("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
 			print("executed")
 			results = cur.fetchone()
 			print("fetched")
 			print(results[0])
 
-			return userID
+			return str(results[0])
 		else:
 			redirect('/login/')
+
+	if request.method == 'POST':
+
+		sku = request.form["sku"]
+
+		if isLoggedin():
+			userID = str(session["userID"])
+			con = createDBConnection()
+			cur = con.cursor()
+			print("About to execute")
+			cur.execute("UPDATE users SET favorites = array_append(favorites,%s) WHERE userid = %s", (sku,userID))
+			print("executed")
+			results = cur.fetchone()
+			print("fetched")
+			print(results[0])
+
+			return "Added to favorites!"
+
+		else:
+			redirect('/login/')
+
 
 
 if __name__ == '__main__':
