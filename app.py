@@ -209,13 +209,13 @@ def checkLogin():
 	else :
 		return "Invalid Request Type"
 
-@app.route("/logout/", methods=["GET"])
+@app.route("/logout/", methods=['GET'])
 def removeSession():
 	session["loggedin"] = False
 	session.clear()
 	return "Logged Out"
 
-@app.route("/favorite/", methods=["GET", "POST"])
+@app.route("/favorite/", methods=['GET', 'POST'])
 def favorite():
 
 	if request.method == 'GET':
@@ -225,7 +225,7 @@ def favorite():
 			con = createDBConnection()
 			cur = con.cursor
 			print("About to execute")
-			print "SELECT favorites FROM users WHERE \"userid\" = %s", (userID,)
+			email = "mreed@magswitch.com.au"
 			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 			print("executed")
 			results = cur.fetchone()
