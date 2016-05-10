@@ -222,7 +222,7 @@ def favorite():
 	if isLoggedin():
 		print("you're logged in")
 		print(session["userID"])
-		return ("Your userID is: %d", session["userID"])
+		return ("Your userID is: " + session["userID"])
 	else:
 		redirect('/login/')
 
