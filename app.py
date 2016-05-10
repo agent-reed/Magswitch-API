@@ -225,7 +225,7 @@ def favorite():
 			con = createDBConnection()
 			cur = con.cursor
 			print("About to execute")
-			print("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
+			print "SELECT favorites FROM users WHERE \"userid\" = %s", (userID,)
 			cur.execute("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
 			print("executed")
 			results = cur.fetchone()
