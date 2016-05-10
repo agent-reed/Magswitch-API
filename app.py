@@ -163,7 +163,6 @@ def checkLogin():
 			return "True"
 		else:
 			return '''
-	
 					<form action = "" method = "post">
 						<p>Email: <input type ="text" name ="email" /></p>
 						<p>Password: <input type ="text" name ="psswrd_attempt" /></p>
@@ -221,6 +220,8 @@ def removeSession():
 def favorite():
 
 	if isLoggedin():
+		print("you're logged in")
+		print(session["userID"])
 		return session["userID"]
 	else:
 		redirect('/login/')
