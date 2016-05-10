@@ -178,7 +178,6 @@ def checkLogin():
 
 		con = createDBConnection()
 		cur = con.cursor()
-		print("created cursor")
 		print(email)
 
 		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
@@ -219,13 +218,22 @@ def removeSession():
 @app.route("/favorite/", methods=["GET", "POST"])
 def favorite():
 
-	if isLoggedin():
-		print("you're logged in")
-		print(session["userID"])
-		userID = str(session["userID"])
-		return ("Your userID is: " + userID)
-	else:
-		redirect('/login/')
+	if request.method == 'GET':
+		if isLoggedin():
+			userID = str(session["userID"])
+
+			con = createDBConnection()
+			cur = con.cursor
+			print("About to execute")
+			cur.execute("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
+			print("executed")
+			results = cur.fetchone()
+			print("fetched")
+			print(results[0])
+
+			return userID
+		else:
+			redirect('/login/')
 
 
 if __name__ == '__main__':
