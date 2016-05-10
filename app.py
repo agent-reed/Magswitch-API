@@ -244,11 +244,8 @@ def favorite():
 			cur = con.cursor()
 			print("About to execute")
 			cur.execute("UPDATE users SET favorites = array_append(favorites,%s) WHERE userid = %s", (sku,userID))
-			print("executed")
-			results = cur.fetchone()
-			print("fetched")
-			print(results[0])
-
+			con.commit()
+			
 			return "Added to favorites!"
 
 		else:
