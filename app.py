@@ -217,6 +217,13 @@ def removeSession():
 	session.clear()
 	return "Logged Out"
 
+@app.route("/favorite/", methods=["GET", "POST"])
+def favorite():
+
+	if isLoggedin():
+		return session["userID"]
+	else:
+		redirect('/login/')
 
 
 if __name__ == '__main__':
