@@ -226,7 +226,7 @@ def favorite():
 			cur = con.cursor
 			print("About to execute")
 			print "SELECT favorites FROM users WHERE \"userid\" = %s", (userID,)
-			cur.execute("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
+			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 			print("executed")
 			results = cur.fetchone()
 			print("fetched")
