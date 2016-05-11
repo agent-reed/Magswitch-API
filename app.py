@@ -236,14 +236,14 @@ def favorite():
 
 	if request.method == 'POST':
 
-		sku = request.form["sku"]
+		productid = request.form["productid"]
 
 		if isLoggedin():
 			userID = str(session["userID"])
 			con = createDBConnection()
 			cur = con.cursor()
 			print("About to execute")
-			cur.execute("UPDATE users SET favorites = array_append(favorites,%s) WHERE userid = %s", (sku,userID))
+			cur.execute("UPDATE users SET favorites = array_append(favorites,%s) WHERE userid = %s", (productid,userID))
 			con.commit()
 			
 			return "Added to favorites!"
