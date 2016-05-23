@@ -70,9 +70,7 @@ def addUserToDB(newUser):
 	try:
 		cur = con.cursor()
 		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
-		print("Selct Executed")
 		lastUserID = cur.fetchone()
-		print(lastUserID[0])
 		nextUserID = lastUserID[0] + 1
 		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (newUser.firstName, newUser.lastName, newUser.email, newUser.distributor, newUser.salesperson, newUser.admin, newUser.psswrd, nextUserID))
 		con.commit()
@@ -115,7 +113,7 @@ def addBugToDB(newBug):
 def createUser():
 	if request.method == 'POST':
 
-		print("Recived a POST request")
+		print("Recived a POST request under Create")
 		firstName = request.form['firstName']
 		lastName = request.form['lastName']
 		email = request.form['email']
@@ -173,12 +171,13 @@ def checkLogin():
 
 
 	if request.method == 'POST':
+		print("Recieved a POST request under Login")
 		email = request.form['email']
 		psswrd_attempt = request.form['psswrd_attempt']
 
 		con = createDBConnection()
 		cur = con.cursor()
-		print(email)
+		print("Email: " email)
 
 		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 		
@@ -250,6 +249,30 @@ def favorite():
 
 		else:
 			redirect('/login/')
+
+@app.route("/deleteFavorite/", methods=['POST'])
+def deleteFavorite():
+
+	if request.method == 'POST':
+
+		productid = request.form["productid"]
+
+		if isLoggedin():
+			userID = str(session["userID"])
+			con = createDBConnection()
+			cur = con.cursor()
+			print("About to execute")
+			cur.execute("UPDATE users SET favorites = array_remove(favorites,%s) WHERE userid = %s", (productid,userID))
+			con.commit()
+			
+			return "Removed from favorites"
+
+		else:
+			redirect('/login/')
+
+
+
+
 
 
 
