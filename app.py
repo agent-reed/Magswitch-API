@@ -200,7 +200,7 @@ def checkLogin():
 
 		if validCredentials:
 			print("Logged in fine")
-			return "%s, %s" (results[0], results[1])
+			return results[0] + " " + results[1]
 		else:
 			print("bad password")
 			return "Unauthorized"
