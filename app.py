@@ -179,13 +179,16 @@ def checkLogin():
 		cur = con.cursor()
 		print("Email: " + email)
 
-		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
+		cur.execute("SELECT psswrd, userid, firstname, lastname FROM users WHERE \"email\" = %s", (email,))
 		
 		results = cur.fetchone()
 		validCredentials = False
 
 		print(results[0])
 		print(results[1])
+		print("First Name: " + results[2])
+		print("Last Name: "+ results[3])
+
 
 		try:
 			if checkPassword(psswrd_attempt, results[0]):
@@ -200,7 +203,7 @@ def checkLogin():
 
 		if validCredentials:
 			print("Logged in fine")
-			return "Welcome!"
+			return "%s, %s" (results[2], results[3])
 		else:
 			print("bad password")
 			return "Unauthorized"
