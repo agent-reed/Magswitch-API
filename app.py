@@ -179,7 +179,7 @@ def checkLogin():
 		cur = con.cursor()
 		print("Email: " + email)
 
-		cur.execute("SELECT firstname, lastname, psswrd, userid FROM users WHERE \"email\" = %s", (email,))
+		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 		
 		results = cur.fetchone()
 		validCredentials = False
@@ -188,7 +188,7 @@ def checkLogin():
 		print(results[1])
 
 		try:
-			if checkPassword(psswrd_attempt, results[2]):
+			if checkPassword(psswrd_attempt, results[0]):
 				validCredentials = True
 				createSession(results[1])
 				print("created session")
