@@ -179,7 +179,7 @@ def checkLogin():
 		cur = con.cursor()
 		print("Email: " + email)
 
-		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
+		cur.execute("SELECT firstname, lastname, psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 		
 		results = cur.fetchone()
 		validCredentials = False
