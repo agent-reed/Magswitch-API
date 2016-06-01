@@ -187,7 +187,7 @@ def checkLogin():
 		print(results[0])
 		print(results[1])
 		print("First Name: " + results[2])
-		print("Last Name: "+ results[3])
+		print("Last Name: " + results[3])
 
 
 		try:
