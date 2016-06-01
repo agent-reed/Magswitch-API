@@ -186,12 +186,9 @@ def checkLogin():
 
 		print(results[0])
 		print(results[1])
-		print("First Name: " + results[2])
-		print("Last Name: " + results[3])
-
 
 		try:
-			if checkPassword(psswrd_attempt, results[0]):
+			if checkPassword(psswrd_attempt, results[2]):
 				validCredentials = True
 				createSession(results[1])
 				print("created session")
@@ -203,7 +200,7 @@ def checkLogin():
 
 		if validCredentials:
 			print("Logged in fine")
-			return "%s, %s" (results[2], results[3])
+			return "%s, %s" (results[0], results[1])
 		else:
 			print("bad password")
 			return "Unauthorized"
