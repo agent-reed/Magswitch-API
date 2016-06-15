@@ -3,26 +3,49 @@ import psycopg2
 from prettytable import PrettyTable
 import bcrypt
 from bcrypt import hashpw, gensalt
+import sys
 
 app = Flask(__name__)
 app.debug = True
 
 class User:
 
-	def __init__(self, firstName, lastName, email, distributor, salesperson, admin, psswrd):
+	def __init__(self, userid):
 		try:
-			self.firstName = firstName
-			self.lastName = lastName
-			self.email = email
-			self.distributor = distributor
-			self.salesperson = salesperson
-			self.admin = admin
-			self.psswrd = psswrd
+			con = createDBConnection()
+			cur = con.cursor()
+			cur.execute("SELECT firstname, lastname, email, distributor, salesperson, admin, logincount FROM users WHERE userid = %s", (userid,))
+			results = cur.fetchone()
+
+			self.firstName = results[0]
+			self.lastName = results[1]
+			self.email = results[2]
+			self.distributor = results[3]
+			self.salesperson = results[4]
+			self.admin = results[5]
+			self.logincount = results[6]
+			self.userid = userid
+
 			print("New user created: " + self.firstName + " " + self.lastName)
 
 		except:
 			print("Unexpected error:", sys.exc_info()[0])
 			raise
+
+	def incrementLoginCount(self):
+		try:
+			con = createDBConnection()
+			cur = con.cursor()
+			cur.execute("SELECT logincount FROM users WHERE userid = %s", (self.userid,))
+			oldcount = cur.fetchone()
+			newcount = oldcount[0] + 1
+			print("New count is: %s", (newcount))
+			cur.execute("UPDATE users SET logincount = %s WHERE userid = %s", (newcount, self.userid))
+			con.commit()
+			print("incremented fine")
+
+		except Exception as err:
+			print(err)
 
 class Bug:
 
@@ -58,7 +81,7 @@ def createDBConnection():
 	try:
 		con = psycopg2.connect(host='localhost', database='magswitchDB', user='andrewgentry')
 		print "Connected to the DB successfully"
-		
+
 	except psycopg2.OperationalError as e:
 		print('Unable to connect!\n{0}').format(e)
 		sys.exit(1)
@@ -66,7 +89,7 @@ def createDBConnection():
 	finally:
 		return con
 
-def addUserToDB(newUser):
+def addUserToDB(firstName,lastName,email,distributor,salesperson,admin,psswrd):
 	con = createDBConnection()
 
 	try:
@@ -74,9 +97,9 @@ def addUserToDB(newUser):
 		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
 		lastUserID = cur.fetchone()
 		nextUserID = lastUserID[0] + 1
-		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (newUser.firstName, newUser.lastName, newUser.email, newUser.distributor, newUser.salesperson, newUser.admin, newUser.psswrd, nextUserID))
+		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (firstName, lastName, email, distributor, salesperson, admin, psswrd, nextUserID))
 		con.commit()
-		print ("Added '" + newUser.firstName + " to the database.")
+		print ("Added " + firstName + " to the database.")
 
 	except Exception as err:
 		print(err)
@@ -126,10 +149,9 @@ def createUser():
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)
 
-			newUser = User(firstName,lastName,email,distributor,salesperson,admin,hashed)
-			addUserToDB(newUser)
+			addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed)
 
-			return 'Created A User'
+			return 'Created a User'
 
 		except psycopg2.OperationalError as e:
 			print('Unable to connect!\n{0}').format(e)
@@ -164,7 +186,10 @@ def checkLogin():
 	if request.method == 'GET':
 		
 		if isLoggedin():
-			return 'Welcome!'
+			userID = str(session["userID"])
+			newUser = User(userID)
+			newUser.incrementLoginCount()
+			return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount)
 
 		else:
 			return '''
@@ -189,8 +214,11 @@ def checkLogin():
 			results = cur.fetchone()
 		
 			if checkPassword(psswrd_attempt, results[0]):
-				createSession(results[1])
-				return "Welcome!", 201
+				userID = results[1]
+				createSession(userID)
+				newUser = User(userID)
+				newUser.incrementLoginCount()
+				return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount), 201
 			else:
 				print("Incorrect Combination")
 				return "Unauthorized", 401
