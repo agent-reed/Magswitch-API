@@ -79,7 +79,7 @@ def checkPassword(passwrd, hashedPass):
 def createDBConnection():
 	con = None
 	try:
-		con = psycopg2.connect(host='localhost', database='magswitchDB', user='andrewgentry')
+		con = psycopg2.connect(database='AppDB', user='admin-gentry')
 		print "Connected to the DB successfully"
 
 	except psycopg2.OperationalError as e:
