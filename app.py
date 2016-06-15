@@ -189,7 +189,8 @@ def checkLogin():
 			userID = str(session["userID"])
 			newUser = User(userID)
 			newUser.incrementLoginCount()
-			return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount)
+			return "Welcome!"
+			# return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount)
 
 		else:
 			return '''
@@ -218,10 +219,11 @@ def checkLogin():
 				createSession(userID)
 				newUser = User(userID)
 				newUser.incrementLoginCount()
-				return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount), 201
+				return "Welcome!"
+				# return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount), 201
 			else:
 				print("Incorrect Combination")
-				return "Unauthorized", 401
+				return "Unauthorized"
 
 		except Exception as err:
 			print(err)
