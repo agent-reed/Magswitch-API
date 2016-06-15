@@ -5,6 +5,7 @@ import bcrypt
 from bcrypt import hashpw, gensalt
 
 app = Flask(__name__)
+app.debug = True
 
 class User:
 
@@ -28,7 +29,7 @@ class Bug:
 	def __init__(self, description, date, device):
 		self.description = description
 		self.date = date
-		self.device = device	
+		self.device = device    
 		print("new bug found")
 
 def isLoggedin():
@@ -55,10 +56,11 @@ def checkPassword(passwrd, hashedPass):
 def createDBConnection():
 	con = None
 	try:
-		con = psycopg2.connect(database='AppDB', user='admin-gentry')
-		print "connected to the DB successfully"
-	except psycopg2.DatabaseError as e:
-		print "Connection Error." + e
+		con = psycopg2.connect(host='localhost', database='magswitchDB', user='andrewgentry')
+		print "Connected to the DB successfully"
+		
+	except psycopg2.OperationalError as e:
+		print('Unable to connect!\n{0}').format(e)
 		sys.exit(1)
 
 	finally:
@@ -76,9 +78,8 @@ def addUserToDB(newUser):
 		con.commit()
 		print ("Added '" + newUser.firstName + " to the database.")
 
-	except psycopg2.DatabaseError as e:
-
-		print "Error adding a user." + e
+	except Exception as err:
+		print(err)
 
 		if con:
 			con.rollback
@@ -99,8 +100,8 @@ def addBugToDB(newBug):
 		con.commit()
 		print("Added a Bug to the DataBase")
 
-	except psycopg2.DatabaseError as e:
-		print "Error adding a bug." + e
+	except psycopg2.OperationalError as e:
+		print('Unable to connect!\n{0}').format(e)
 
 	finally:
 		if con:
@@ -113,24 +114,30 @@ def addBugToDB(newBug):
 def createUser():
 	if request.method == 'POST':
 
-		print("Recived a POST request under Create")
-		firstName = request.form['firstName']
-		lastName = request.form['lastName']
-		email = request.form['email']
-		distributor = request.form['distributor']
-		salesperson = request.form['salesperson']
-		admin = request.form['admin']
+		try:
+			print("Recived a POST request under Create")
+			firstName = request.form['firstName']
+			lastName = request.form['lastName']
+			email = request.form['email']
+			distributor = request.form['distributor']
+			salesperson = request.form['salesperson']
+			admin = request.form['admin']
 
-		psswrd = request.form['psswrd']
-		hashed = hashPassword(psswrd)
+			psswrd = request.form['psswrd']
+			hashed = hashPassword(psswrd)
 
-		newUser = User(firstName,lastName,email,distributor,salesperson,admin,hashed)
-		addUserToDB(newUser)
+			newUser = User(firstName,lastName,email,distributor,salesperson,admin,hashed)
+			addUserToDB(newUser)
 
-		return 'Created A User'
+			return 'Created A User'
+
+		except psycopg2.OperationalError as e:
+			print('Unable to connect!\n{0}').format(e)
+
+			return 'Unable to create a new user'
 
 	else:
-		return status.HTTP_405_METHOD_NOT_ALLOWED
+		return "Method Not Allowed"
 
 @app.route('/bug/', methods=['POST'])
 def bugReport():
@@ -145,11 +152,10 @@ def bugReport():
 		return "Added bug"
 
 	else:
-		return status.HTTP_405_METHOD_NOT_ALLOWED
+		return "Method Not Allowed"
 
 @app.route('/')
 def index():
-	print "Accessed the server"
 	return redirect('http://www.magswitch.com.au')
 
 app.secret_key = '087c38712m]43jvdsp[ew'
@@ -158,7 +164,8 @@ def checkLogin():
 	if request.method == 'GET':
 		
 		if isLoggedin():
-			return "True"
+			return 'Welcome!'
+
 		else:
 			return '''
 					<form action = "" method = "post">
@@ -169,45 +176,29 @@ def checkLogin():
 	
 					'''
 
-
 	if request.method == 'POST':
-		print("Recieved a POST request under Login")
-		email = request.form['email']
-		psswrd_attempt = request.form['psswrd_attempt']
-
-		con = createDBConnection()
-		cur = con.cursor()
-		print("Email: " + email)
-
-		cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
-		
-		results = cur.fetchone()
-		validCredentials = False
-
-		print(results[0])
-		print(results[1])
-
 		try:
+
+			email = request.form['email']
+			psswrd_attempt = request.form['psswrd_attempt']
+			print("Email: " + email)
+
+			con = createDBConnection()
+			cur = con.cursor()
+			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
+			results = cur.fetchone()
+		
 			if checkPassword(psswrd_attempt, results[0]):
-				validCredentials = True
 				createSession(results[1])
-				print("created session")
+				return "Welcome!", 201
 			else:
-				print("checkPassword didn't return true")
+				print("Incorrect Combination")
+				return "Unauthorized", 401
 
-		except:
-			pass
+		except Exception as err:
+			print(err)
+			return "An Error Occured"
 
-		if validCredentials:
-			print("Logged in fine")
-			return "Welcome!"
-
-		else:
-			print("bad password")
-			return "Unauthorized"
-
-	else :
-		return "Invalid Request Type"
 
 @app.route("/logout/", methods=['GET'])
 def removeSession():
@@ -220,6 +211,7 @@ def favorite():
 
 	if request.method == 'GET':
 		if isLoggedin():
+			print("Somebody is logged in")
 			userID = str(session["userID"])
 			con = createDBConnection()
 			cur = con.cursor()
@@ -232,7 +224,7 @@ def favorite():
 
 			return str(results[0])
 		else:
-			redirect('/login/')
+			return redirect('/login/')
 
 	if request.method == 'POST':
 
@@ -249,7 +241,7 @@ def favorite():
 			return "Added to favorites!"
 
 		else:
-			redirect('/login/')
+			return redirect('/login/')
 
 @app.route("/deleteFavorite/", methods=['POST'])
 def deleteFavorite():
@@ -272,11 +264,6 @@ def deleteFavorite():
 			redirect('/login/')
 
 
-
-
-
-
-
 if __name__ == '__main__':
-	app.run(DEBUG=True)
+	app.run()
 
