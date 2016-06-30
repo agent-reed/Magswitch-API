@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, session, request, redirect
 import psycopg2
-from prettytable import PrettyTable
 import bcrypt
 from bcrypt import hashpw, gensalt
 import sys
