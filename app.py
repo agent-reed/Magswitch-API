@@ -1,50 +1,15 @@
 from flask import Flask, jsonify, session, request, redirect
-import psycopg2
+
+from user import User
+
 import bcrypt
-from bcrypt import hashpw, gensalt
-import sys
+import db
+import calcs
+
+
 
 app = Flask(__name__)
 app.debug = True
-
-class User:
-
-	def __init__(self, userid):
-		try:
-			con = createDBConnection()
-			cur = con.cursor()
-			cur.execute("SELECT firstname, lastname, email, distributor, salesperson, admin, logincount FROM users WHERE userid = %s", (userid,))
-			results = cur.fetchone()
-
-			self.firstName = results[0]
-			self.lastName = results[1]
-			self.email = results[2]
-			self.distributor = results[3]
-			self.salesperson = results[4]
-			self.admin = results[5]
-			self.logincount = results[6]
-			self.userid = userid
-
-			print("New user created: " + self.firstName + " " + self.lastName)
-
-		except:
-			print("Unexpected error:", sys.exc_info()[0])
-			raise
-
-	def incrementLoginCount(self):
-		try:
-			con = createDBConnection()
-			cur = con.cursor()
-			cur.execute("SELECT logincount FROM users WHERE userid = %s", (self.userid,))
-			oldcount = cur.fetchone()
-			newcount = oldcount[0] + 1
-			print("New count is: %s", (newcount))
-			cur.execute("UPDATE users SET logincount = %s WHERE userid = %s", (newcount, self.userid))
-			con.commit()
-			print("incremented fine")
-
-		except Exception as err:
-			print(err)
 
 class Bug:
 
@@ -75,62 +40,6 @@ def hashPassword(psswrd):
 def checkPassword(passwrd, hashedPass):
 	return hashedPass.encode() == bcrypt.hashpw(passwrd.encode(), hashedPass.encode())
 
-def createDBConnection():
-	con = None
-	try:
-		con = psycopg2.connect(database='AppDB', user='admin-gentry')
-		print "Connected to the DB successfully"
-
-	except psycopg2.OperationalError as e:
-		print('Unable to connect!\n{0}').format(e)
-		sys.exit(1)
-
-	finally:
-		return con
-
-def addUserToDB(firstName,lastName,email,distributor,salesperson,admin,psswrd):
-	con = createDBConnection()
-
-	try:
-		cur = con.cursor()
-		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
-		lastUserID = cur.fetchone()
-		nextUserID = lastUserID[0] + 1
-		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (firstName, lastName, email, distributor, salesperson, admin, psswrd, nextUserID))
-		con.commit()
-		print ("Added " + firstName + " to the database.")
-
-	except Exception as err:
-		print(err)
-
-		if con:
-			con.rollback
-		sys.exit(1)
-
-	finally:
-		if con:
-			con.close
-
-		return
-
-def addBugToDB(newBug):
-	con = createDBConnection()
-
-	try:
-		cur = con.cursor()
-		cur.execute("INSERT INTO bugs VALUES(%s,%s,%s)", (newBug.description, newBug.date, newBug.device))
-		con.commit()
-		print("Added a Bug to the DataBase")
-
-	except psycopg2.OperationalError as e:
-		print('Unable to connect!\n{0}').format(e)
-
-	finally:
-		if con:
-			con.close
-
-		return
-
 
 @app.route('/create/', methods=['POST'])
 def createUser():
@@ -148,12 +57,12 @@ def createUser():
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)
 
-			addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed)
+			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed)
 
 			return 'Created a User'
 
-		except psycopg2.OperationalError as e:
-			print('Unable to connect!\n{0}').format(e)
+		except Exception as err:
+			print(err)
 
 			return 'Unable to create a new user'
 
@@ -167,7 +76,7 @@ def bugReport():
 		date = request.form['date']
 		device = request.form['device']
 		newBug = Bug(description, date, device)
-		addBugToDB(newBug)
+		db.addBugToDB(newBug)
 	
 		print "Added a Bug"
 		return "Added bug"
@@ -208,7 +117,7 @@ def checkLogin():
 			psswrd_attempt = request.form['psswrd_attempt']
 			print("Email: " + email)
 
-			con = createDBConnection()
+			con = db.createDBConnection()
 			cur = con.cursor()
 			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 			results = cur.fetchone()
@@ -226,7 +135,7 @@ def checkLogin():
 
 		except Exception as err:
 			print(err)
-			return "An Error Occured"
+			return "An error occured with logging in."
 
 
 @app.route("/logout/", methods=['GET'])
@@ -242,7 +151,7 @@ def favorite():
 		if isLoggedin():
 			print("Somebody is logged in")
 			userID = str(session["userID"])
-			con = createDBConnection()
+			con = db.createDBConnection()
 			cur = con.cursor()
 			print("About to execute")
 			cur.execute("SELECT favorites FROM users WHERE \"userid\" = %s", (userID,))
@@ -261,7 +170,7 @@ def favorite():
 
 		if isLoggedin():
 			userID = str(session["userID"])
-			con = createDBConnection()
+			con = db.createDBConnection()
 			cur = con.cursor()
 			print("About to execute")
 			cur.execute("UPDATE users SET favorites = array_append(favorites,%s) WHERE userid = %s", (productid,userID))
@@ -281,7 +190,7 @@ def deleteFavorite():
 
 		if isLoggedin():
 			userID = str(session["userID"])
-			con = createDBConnection()
+			con = db.createDBConnection()
 			cur = con.cursor()
 			print("About to execute")
 			cur.execute("UPDATE users SET favorites = array_remove(favorites,%s) WHERE userid = %s", (productid,userID))
@@ -291,6 +200,24 @@ def deleteFavorite():
 
 		else:
 			redirect('/login/')
+
+
+@app.route("/calculate/", methods=['POST'])
+def calculateHoldingForce():
+
+	unit = request.form["unit"]
+	material = request.form["material"]
+	thickness = request.form["thickness"]
+
+	if thickness < 0:
+		print("Negative thickness given - Cannot Calculate")
+		return "Invalid Input"
+
+	holdingForce = calcs.holdingCalc(unit, material, thickness)
+
+	print("Holding force is %s kg" % holdingForce)
+
+	return holdingForce
 
 
 if __name__ == '__main__':
