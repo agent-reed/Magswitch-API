@@ -4,8 +4,8 @@ import sys
 def createDBConnection():
 	con = None
 	try:
-		#con = psycopg2.connect(database='magswitchDB', user='andrewgentry')  # For use on localhost
-		con = psycopg2.connect(database='AppDB', user='admin-gentry')   # For deployed use only
+		con = psycopg2.connect(database='magswitchDB', user='andrewgentry')  # For use on localhost
+		#con = psycopg2.connect(database='AppDB', user='admin-gentry')   # For deployed use only
 		print "Connected to the DB successfully"
 
 	except psycopg2.OperationalError as e:
@@ -15,15 +15,16 @@ def createDBConnection():
 	finally:
 		return con
 
-def addUserToDB(firstName,lastName,email,distributor,salesperson,admin,psswrd):
+def addUserToDB(firstName,lastName,email,distributor,salesperson,admin,interest,psswrd):
 	con = createDBConnection()
+	print("Connection Created")
 
 	try:
 		cur = con.cursor()
 		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
 		lastUserID = cur.fetchone()
 		nextUserID = lastUserID[0] + 1
-		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (firstName, lastName, email, distributor, salesperson, admin, psswrd, nextUserID))
+		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", (firstName, lastName, email, distributor, salesperson, admin, psswrd, nextUserID, interest))
 		con.commit()
 		print ("Added " + firstName + " to the database.")
 

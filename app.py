@@ -6,8 +6,6 @@ import bcrypt
 import db
 import calcs
 
-
-
 app = Flask(__name__)
 app.debug = True
 
@@ -38,8 +36,8 @@ def hashPassword(psswrd):
 	return bcrypt.hashpw(psswrd.encode(), bcrypt.gensalt().encode())
 
 def checkPassword(passwrd, hashedPass):
+	print("Checking Password...")
 	return hashedPass.encode() == bcrypt.hashpw(passwrd.encode(), hashedPass.encode())
-
 
 @app.route('/create/', methods=['POST'])
 def createUser():
@@ -53,11 +51,12 @@ def createUser():
 			distributor = request.form['distributor']
 			salesperson = request.form['salesperson']
 			admin = request.form['admin']
+			interest = request.form['interest']
 
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)
 
-			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed)
+			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,interest,hashed)
 
 			return 'Created a User'
 
@@ -97,8 +96,9 @@ def checkLogin():
 			userID = str(session["userID"])
 			newUser = User(userID)
 			newUser.incrementLoginCount()
-			return "Welcome!"
-			# return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount)
+			newUser.updateHistory()
+			# return "Welcome!"
+			return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount, interest=newUser.interest), 201
 
 		else:
 			return '''
@@ -112,7 +112,6 @@ def checkLogin():
 
 	if request.method == 'POST':
 		try:
-
 			email = request.form['email']
 			psswrd_attempt = request.form['psswrd_attempt']
 			print("Email: " + email)
@@ -120,18 +119,22 @@ def checkLogin():
 			con = db.createDBConnection()
 			cur = con.cursor()
 			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
+			print("Post Executed")
 			results = cur.fetchone()
-		
+			print("Results Fetched")
+
 			if checkPassword(psswrd_attempt, results[0]):
+				print("Password Checks Out")
 				userID = results[1]
 				createSession(userID)
 				newUser = User(userID)
 				newUser.incrementLoginCount()
-				return "Welcome!"
-				# return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount), 201
+				newUser.updateHistory()
+				# return "Welcome!"
+				return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount, interest=newUser.interest), 201
 			else:
 				print("Incorrect Combination")
-				return "Unauthorized"
+				return "Unauthorized", 403
 
 		except Exception as err:
 			print(err)
@@ -143,6 +146,51 @@ def removeSession():
 	session["loggedin"] = False
 	session.clear()
 	return "Logged Out"
+
+
+@app.route("/product/", methods=['POST'])
+def tagProduct():
+
+	if request.method == 'POST':
+
+		productid = request.form["productid"]
+		name = request.form["name"]
+
+		if isLoggedin():
+			print("Somebody is logged in")
+			userID = int(session["userID"])
+			con = db.createDBConnection()
+			cur = con.cursor()
+
+			cur.execute("SELECT EXISTS(SELECT 1 FROM products WHERE productid=%s)", (productid,))
+			result = cur.fetchone()
+			if result[0] == False:
+				cur.execute("INSERT INTO products VALUES(%s, %s, %s, %s, %s)", (productid, name, 1, 1, [userID,0]))
+				con.commit()
+
+			else:
+				cur.execute("SELECT totalviews, users FROM products WHERE productid=%s", (productid,))
+				result = cur.fetchone()
+				total = result[0]
+				users = result[1]
+				print(users)
+				print(userID)
+				cur.execute("UPDATE products SET totalviews=%s WHERE productid=%s", (total+1, productid))
+
+				if userID in users:
+					print("User already in list")
+				else:
+					cur.execute("UPDATE products SET users = array_append(users,%s)", (userID,))
+
+				con.commit()
+
+			# cur.execute("UPDATE products SET totalviews=%s WHERE productid=%s", (23,productid))
+			# cur.execute("INSERT INTO products (productid, name, totalviews) SELECT %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM products WHERE productid=%s)", (productid, name, 24, productid))
+
+			return "Okay"
+
+		else:
+			return "Not logged in"
 
 @app.route("/favorite/", methods=['GET', 'POST'])
 def favorite():

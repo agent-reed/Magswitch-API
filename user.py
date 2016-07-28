@@ -1,5 +1,6 @@
 import db
 import sys
+import time
 
 class User:
 
@@ -7,7 +8,7 @@ class User:
 		try:
 			con = db.createDBConnection()
 			cur = con.cursor()
-			cur.execute("SELECT firstname, lastname, email, distributor, salesperson, admin, logincount FROM users WHERE userid = %s", (userid,))
+			cur.execute("SELECT firstname, lastname, email, distributor, salesperson, admin, logincount, interest FROM users WHERE userid = %s", (userid,))
 			results = cur.fetchone()
 
 			self.firstName = results[0]
@@ -18,6 +19,8 @@ class User:
 			self.admin = results[5]
 			self.logincount = results[6]
 			self.userid = userid
+			self.interest = results[7]
+			self.lastLogin = "7-20-2016"
 
 			print("New user created: " + self.firstName + " " + self.lastName)
 
@@ -39,3 +42,16 @@ class User:
 
 		except Exception as err:
 			print(err)
+
+	def updateHistory(self):
+		try:
+			con = db.createDBConnection()
+			cur = con.cursor()
+			date = time.strftime("%c")
+			cur.execute("UPDATE users SET lastlogin = %s WHERE userid = %s", (date, self.userid))
+			con.commit()
+			print("Updated User Login Date")
+
+		except Exception as err:
+			print(err)
+
