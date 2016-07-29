@@ -18,7 +18,7 @@ cur.execute("SELECT userid FROM users ORDER BY userid DESC LIMIT 1")
 thisHigh = cur.fetchone()
 
 #grab the highest userid that has been stored in stats.  we know the difference between the two is the number of new users. 
-cur.execute("SELECT newusers FROM stats ORDER BY entry DESC LIMIT 1")
+cur.execute("SELECT newusers FROM stats")
 oldHigh = cur.fetchall()
 newusers = thisHigh[0] - sum(oldHigh[0])
 print(newusers)
