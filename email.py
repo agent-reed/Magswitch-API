@@ -22,7 +22,7 @@ oldHigh = cur.fetchone()
 newusers = thisHigh[0] - oldHigh[0]
 
 cur.execute("SELECT logincount FROM users")
-logins = cur.fetchall(0)
+logins = cur.fetchall()
 
 someList = [] 
 for i in logins:
