@@ -21,6 +21,7 @@ thisHigh = cur.fetchone()
 cur.execute("SELECT newusers FROM stats")
 oldHigh = cur.fetchall()
 newusers = thisHigh[0] - sum(oldHigh[0])
+print(newusers)
 
 cur.execute("SELECT logincount FROM users")
 logins = cur.fetchall()
@@ -35,6 +36,7 @@ cur.execute("SELECT logins, entry FROM stats")  #while we're in the stats table 
 lastCount = cur.fetchall()
 lastEntry = lastCount[1]
 weeklyLogins = newCount - sum(lastCount[0])
+print(weeklyLogins)
 
 #each time we run this script we want to post it's results in the stats table and stamp the date on it
 date = time.strftime("%c")
