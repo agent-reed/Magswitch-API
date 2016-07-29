@@ -41,7 +41,4 @@ date = time.strftime("%c")
 cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)", (lastEntry+1, date, newusers, weeklyLogins, weeklyproduct))
 con.commit()
 
-os.system("echo \"This week, the most viewed product was: %s \n Number of new users : %s \n Number of Logins this week: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
-
-
-
+os.system("echo \"Hey everybody! Here are the statistics for the Mobile App over the past week:\n\n Most Viewed Product: %s \n\nNumber of new users: %s \n\nNumber of logins: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
