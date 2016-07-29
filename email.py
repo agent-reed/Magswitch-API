@@ -22,10 +22,16 @@ oldHigh = cur.fetchone()
 newusers = thisHigh[0] - oldHigh[0]
 
 cur.execute("SELECT logincount FROM users")
-logins = cur.fetchall()
+logins = cur.fetchall(0)
 
-print(logins)
-print(logins[3])
+someList = [] 
+for i in logins:
+	someList.append(i[0])
+	print i[0]
+
+newCount = sum
+print(newCount)
+
 
 cur.execute("SELECT logins FROM stats ORDER BY entry DESC LIMIT 1")
 lastCount = cur.fetchone()
