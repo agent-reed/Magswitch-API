@@ -1,5 +1,6 @@
 import os
 import db
+import time
 
 con = db.createDBConnection()
 cur = con.cursor()
@@ -29,12 +30,16 @@ for i in logins:
 	someList.append(i[0])
 
 newCount = sum(someList)
-print(newCount)
 
-cur.execute("SELECT logins FROM stats ORDER BY entry DESC LIMIT 1")
+cur.execute("SELECT logins, entry FROM stats ORDER BY entry DESC LIMIT 1")  #while we're in the stats table might as well grab the last entry too
 lastCount = cur.fetchone()
-
+lastEntry = lastCount[1]
 weeklyLogins = newCount - lastCount[0]
+
+#each time we run this script we want to post it's results in the stats table and stamp the date on it
+date = time.strftime("%c")
+cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)", (lastEntry+1, date, newusers, weeklyLogins, weeklyproduct))
+con.commit()
 
 os.system("echo \"This week, the most viewed product was: %s \n Number of new users : %s \n Number of Logins this week: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
 
