@@ -19,8 +19,8 @@ thisHigh = cur.fetchone()
 
 #grab the highest userid that has been stored in stats.  we know the difference between the two is the number of new users. 
 cur.execute("SELECT newusers FROM stats ORDER BY entry DESC LIMIT 1")
-oldHigh = cur.fetchone()
-newusers = thisHigh[0] - oldHigh[0]
+oldHigh = cur.fetchall()
+newusers = thisHigh[0] - sum(oldHigh[0])
 print(newusers)
 
 cur.execute("SELECT logincount FROM users")
@@ -40,7 +40,7 @@ print(weeklyLogins)
 
 #each time we run this script we want to post it's results in the stats table and stamp the date on it
 date = time.strftime("%c")
-cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)" ,(lastEntry+1, date, 1 , weeklyLogins, weeklyproduct))
+cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)" ,(lastEntry+1, date, newusers, weeklyLogins, weeklyproduct))
 con.commit()
 
 os.system("echo \"Hey everybody! Here are the statistics for the Mobile App over the past week.\n\nMost Viewed Product: %s \n\nNumber of new users: %s \n\nNumber of logins: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
