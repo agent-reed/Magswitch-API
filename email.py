@@ -22,7 +22,7 @@ cur.execute("SELECT newusers FROM stats")
 oldHighList = cur.fetchall()
 
 highList = []
-for i in oldHigh:
+for i in oldHighList:
 	highList.append(i[0])
 oldHigh = sum(highList)
 
