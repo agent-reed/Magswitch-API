@@ -27,8 +27,6 @@ for i in oldHighList:
 oldHigh = sum(highList)
 
 newusers = thisHigh[0] - oldHigh
-print(oldHigh)
-print(newusers)
 
 cur.execute("SELECT logincount FROM users")
 logins = cur.fetchall()
@@ -36,13 +34,18 @@ logins = cur.fetchall()
 someList = [] 
 for i in logins:
 	someList.append(i[0])
-
 newCount = sum(someList)
 
 cur.execute("SELECT logins, entry FROM stats ORDER BY entry DESC LIMIT 1")  #while we're in the stats table might as well grab the last entry too
-lastCount = cur.fetchone()
+lastCountList = cur.fetchall()
 lastEntry = lastCount[1]
-weeklyLogins = newCount - lastCount[0]
+
+countList = []
+for i in lastCountList:
+	countList.append(i[0])
+lastCount = sum(countList)
+
+weeklyLogins = newCount - lastCount
 print(weeklyLogins)
 
 #each time we run this script we want to post it's results in the stats table and stamp the date on it
