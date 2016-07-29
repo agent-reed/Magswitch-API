@@ -21,6 +21,8 @@ thisHigh = cur.fetchone()
 cur.execute("SELECT newusers FROM stats")
 oldHigh = cur.fetchall()
 newusers = thisHigh[0] - sum(oldHigh[0])
+print(oldHigh)
+print(sum(oldHigh))
 print(newusers)
 
 cur.execute("SELECT logincount FROM users")
