@@ -1,4 +1,5 @@
-import subprocess
+import os
 
-subprocess.call("echo \"This is a test email from the app server\" | mail -s \"Python Test Email\" agentry@magswitch.com.au")
+os.system("echo \"This is a test email from the app server\" | mail -s \"Another Test Email\" agentry@magswitch.com.au")
+
 
