@@ -19,8 +19,14 @@ thisHigh = cur.fetchone()
 
 #grab the highest userid that has been stored in stats.  we know the difference between the two is the number of new users. 
 cur.execute("SELECT newusers FROM stats")
-oldHigh = cur.fetchall()
-newusers = thisHigh[0] - sum(oldHigh[0])
+oldHighList = cur.fetchall()
+
+highList = []
+for i in oldHigh:
+	highList.append(i[0])
+oldHigh = sum(highList)
+
+newusers = thisHigh[0] - oldHigh
 print(oldHigh)
 print(sum(oldHigh[0]))
 print(newusers)
