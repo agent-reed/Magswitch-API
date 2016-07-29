@@ -36,7 +36,7 @@ for i in logins:
 	someList.append(i[0])
 newCount = sum(someList)
 
-cur.execute("SELECT logins, entry FROM stats ORDER BY userid DESC")  #while we're in the stats table might as well grab the last entry too
+cur.execute("SELECT logins, entry FROM stats ORDER BY entry DESC")  #while we're in the stats table might as well grab the last entry too
 lastCountList = cur.fetchall()
 lastEntry = lastCountList[0][1]
 
