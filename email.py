@@ -33,7 +33,7 @@ for i in logins:
 newCount = sum(someList)
 
 cur.execute("SELECT logins, entry FROM stats")  #while we're in the stats table might as well grab the last entry too
-lastCount = cur.fetchall()
+lastCount = cur.fetchone()
 lastEntry = lastCount[1]
 weeklyLogins = newCount - lastCount[0]
 print(weeklyLogins)
