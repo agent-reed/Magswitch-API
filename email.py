@@ -23,7 +23,7 @@ oldHigh = cur.fetchone()
 newusers = thisHigh[0] - oldHigh[0]
 print(newusers)
 
-cur.execute("SELECT logincount FROM users")
+cur.execute("SELECT logincount FROM users ORDER BY userid DESC LIMIT 1")
 logins = cur.fetchall()
 
 someList = [] 
@@ -32,7 +32,7 @@ for i in logins:
 
 newCount = sum(someList)
 
-cur.execute("SELECT logins, entry FROM stats")  #while we're in the stats table might as well grab the last entry too
+cur.execute("SELECT logins, entry FROM stats ORDER BY userid DESC LIMIT 1")  #while we're in the stats table might as well grab the last entry too
 lastCount = cur.fetchone()
 lastEntry = lastCount[1]
 weeklyLogins = newCount - lastCount[0]
