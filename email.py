@@ -40,7 +40,7 @@ print(weeklyLogins)
 
 #each time we run this script we want to post it's results in the stats table and stamp the date on it
 date = time.strftime("%c")
-cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)" %(lastEntry+1, date, newusers, logins, weeklyproduct))
+cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)" ,(lastEntry+1, date, newusers, logins, weeklyproduct))
 con.commit()
 
 os.system("echo \"Hey everybody! Here are the statistics for the Mobile App over the past week.\n\nMost Viewed Product: %s \n\nNumber of new users: %s \n\nNumber of logins: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
