@@ -16,10 +16,10 @@ con.commit()
 cur.execute("SELECT userid FROM users ORDER BY userid DESC LIMIT 1")
 thisHigh = cur.fetchone()
 
-cur.execute("SELECT newusers FROM stats ORDER BY newusers DESC LIMIT 1")
+cur.execute("SELECT newusers FROM stats ORDER BY entry DESC LIMIT 1")
 oldHigh = cur.fetchone()
 
-newusers = thisHigh - oldHigh
+newusers = thisHigh[0] - oldHigh[0]
 
 
 os.system("echo \"This week, the most popular product was: %s \n Number of new users : %s \" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct, newusers))
