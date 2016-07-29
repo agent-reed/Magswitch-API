@@ -27,16 +27,16 @@ logins = cur.fetchall()
 someList = [] 
 for i in logins:
 	someList.append(i[0])
-	print i[0]
 
-newCount = sum
+newCount = sum(someList)
 print(newCount)
-
 
 cur.execute("SELECT logins FROM stats ORDER BY entry DESC LIMIT 1")
 lastCount = cur.fetchone()
 
-os.system("echo \"This week, the most viewed product was: %s \n Number of new users : %s \" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers))
+weeklyLogins = newCount - lastCount[0]
+
+os.system("echo \"This week, the most viewed product was: %s \n Number of new users : %s \n Number of Logins this week: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
 
 
 
