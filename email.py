@@ -18,12 +18,12 @@ cur.execute("SELECT userid FROM users ORDER BY userid DESC LIMIT 1")
 thisHigh = cur.fetchone()
 
 #grab the highest userid that has been stored in stats.  we know the difference between the two is the number of new users. 
-cur.execute("SELECT newusers FROM stats")
+cur.execute("SELECT newusers FROM stats ORDER BY entry DESC LIMIT 1")
 oldHigh = cur.fetchone()
 newusers = thisHigh[0] - oldHigh[0]
 print(newusers)
 
-cur.execute("SELECT logincount FROM users ORDER BY userid DESC LIMIT 1")
+cur.execute("SELECT logincount FROM users")
 logins = cur.fetchall()
 
 someList = [] 
@@ -32,7 +32,7 @@ for i in logins:
 
 newCount = sum(someList)
 
-cur.execute("SELECT logins, entry FROM stats ORDER BY userid DESC LIMIT 1")  #while we're in the stats table might as well grab the last entry too
+cur.execute("SELECT logins, entry FROM stats ORDER BY entry DESC LIMIT 1")  #while we're in the stats table might as well grab the last entry too
 lastCount = cur.fetchone()
 lastEntry = lastCount[1]
 weeklyLogins = newCount - lastCount[0]
