@@ -28,7 +28,6 @@ oldHigh = sum(highList)
 
 newusers = thisHigh[0] - oldHigh
 print(oldHigh)
-print(sum(oldHigh[0]))
 print(newusers)
 
 cur.execute("SELECT logincount FROM users")
