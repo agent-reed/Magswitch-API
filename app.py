@@ -121,7 +121,7 @@ def checkLogin():
 			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 			print("Post Executed")
 			results = cur.fetchone()
-			print("Results Fetched: %s" %results[0])
+			print("Results Fetched")
 
 			if results[0] and results [1] == None:
 				return "No username in DB", 404
@@ -141,7 +141,7 @@ def checkLogin():
 
 		except Exception as err:
 			print(err)
-			return "An error occured with logging in."
+			return "An error occured with logging in.", 400
 
 
 @app.route("/logout/", methods=['GET'])
