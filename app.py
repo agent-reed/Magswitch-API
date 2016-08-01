@@ -121,7 +121,7 @@ def checkLogin():
 			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
 			print("Post Executed")
 			results = cur.fetchone()
-			print("Results Fetched")
+			print("Results Fetched: %s" %results[0])
 
 			if checkPassword(psswrd_attempt, results[0]):
 				print("Password Checks Out")
