@@ -123,7 +123,7 @@ def checkLogin():
 			results = cur.fetchone()
 			print("Results Fetched: %s" %results[0])
 
-			if results[0] && results [1] == None:
+			if results[0] and results [1] == None:
 				return "No username in DB", 404
 
 			if checkPassword(psswrd_attempt, results[0]):
