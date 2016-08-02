@@ -114,12 +114,12 @@ def checkLogin():
 		try:
 			email = request.form['email']
 			psswrd_attempt = request.form['psswrd_attempt']
+			token = request.form['tokenid']
 			print("Email: " + email)
 
 			con = db.createDBConnection()
 			cur = con.cursor()
 			cur.execute("SELECT psswrd, userid FROM users WHERE \"email\" = %s", (email,))
-			print("Post Executed")
 			results = cur.fetchone()
 			print("Results Fetched")
 
@@ -134,6 +134,9 @@ def checkLogin():
 				newUser.incrementLoginCount()
 				newUser.updateHistory()
 				# return "Welcome!"
+
+				cur.execute("UPDATE users SET tokenid = %s WHERE email = %s", (token, email))
+				con.commit()
 				return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount, interest=newUser.interest), 201
 			else:
 				print("Incorrect Combination")
