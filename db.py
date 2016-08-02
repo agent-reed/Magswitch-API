@@ -24,7 +24,7 @@ def addUserToDB(firstName,lastName,email,distributor,salesperson,admin,interest,
 		cur.execute("SELECT userID FROM users ORDER BY userID DESC LIMIT 1")
 		lastUserID = cur.fetchone()
 		nextUserID = lastUserID[0] + 1
-		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", (firstName, lastName, email, distributor, salesperson, admin, psswrd, nextUserID, interest))
+		cur.execute("INSERT INTO users VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (firstName, lastName, email, distributor, salesperson, admin, psswrd, nextUserID, '{}', 1, interest))
 		con.commit()
 		print ("Added " + firstName + " to the database.")
 
