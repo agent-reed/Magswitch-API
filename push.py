@@ -32,10 +32,14 @@ def pushNotificationById(pnType, message):
 		for token in tokens:
 			apns.gateway_server.send_notification(token, payload)
 
+		return len(tokens)
+
 
 	if pnType == "Annie":
 		token = 'cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d'
 		apns.gateway_server.send_notification(token, payload)
+
+		return 1
 
 
 

@@ -276,13 +276,9 @@ def sendNotifications():
 	if request.method == 'POST':
 		message = request.form["message"]
 		tokenString = request.form["tokens"]
-		push.pushNotificationById(tokenString, message)
+		total = push.pushNotificationById(tokenString, message)
 	
-			return ("Notifications succesfully pushed to %s users" %len(tokens))
-	
-		else:
-	
-			return ("Unexpected Notification Method. Did not recognize '%s' as a valid method." %pnType)
+		return("Sent notifications to %s users." %total)
 
 
 
