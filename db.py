@@ -4,8 +4,8 @@ import sys
 def createDBConnection():
 	con = None
 	try:
-		#con = psycopg2.connect(database='magswitchDB', user='andrewgentry')  # For use on localhost
-		con = psycopg2.connect(database='AppDB', user='admin-gentry')   # For deployed use only
+		con = psycopg2.connect(database='magswitchDB', user='andrewgentry')  # For use on localhost
+		#con = psycopg2.connect(database='AppDB', user='admin-gentry')   # For deployed use only
 		print "Connected to the DB successfully"
 
 	except psycopg2.OperationalError as e:

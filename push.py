@@ -1,17 +1,24 @@
-import time
+import time, os
 from apns import APNs, Frame, Payload
 
-apns = APNs(use_sandbox=True, cert_file='cert.pem', key_file='key.pem')
-
+cert_path = os.path.join(os.path.dirname(__file__), 'apns-dev-cert.pem')
+key_path = os.path.join(os.path.dirname(__file__), 'aps-dev-key_decrypted.pem')
+apns = APNs(use_sandbox=True, cert_file=cert_path, key_file=key_path)
+token_hex = 'cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d'
 # Send a notification
-token_hex = 'b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b87'
-payload = Payload(alert="Hello World!", sound="default", badge=1)
-apns.gateway_server.send_notification(token_hex, payload)
+def pushNotificationById(tokens, message):
+
+	payload = Payload(alert=message, sound="default", badge=1)
+
+	for token in tokens:
+		print(token)
+		apns.gateway_server.send_notification(token, payload)
+
 
 # Send multiple notifications in a single transmission
-frame = Frame()
-identifier = 1
-expiry = time.time()+3600
-priority = 10
-frame.add_item('b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b87', payload, identifier, expiry, priority)
-apns.gateway_server.send_notification_multiple(frame)
+# frame = Frame()
+# identifier = 1
+# expiry = time.time()+3600
+# priority = 10
+# frame.add_item('b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b87', payload, identifier, expiry, priority)
+# apns.gateway_server.send_notification_multiple(frame)

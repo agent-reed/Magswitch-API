@@ -5,6 +5,7 @@ from user import User
 import bcrypt
 import db
 import calcs
+import push
 
 app = Flask(__name__)
 app.debug = True
@@ -254,6 +255,43 @@ def deleteFavorite():
 
 		else:
 			redirect('/login/')
+
+@app.route("/push/", methods=['GET','POST'])
+def sendNotifications():
+
+	if request.method == 'GET':
+
+		return '''
+					<form action = "" method = "post">
+						<p><strong>Notification Message:</strong> <input type ="text" name ="message" /></p>
+						<p><strong>Type:</strong><br>
+						<input type="radio" name="type" id="ID" value="ID"> Token ID </input><br>
+						<input type="radio" name="type" id="Group" value="Group"> Group </input><br>
+						<input type="radio" name="type" id="Everyone" value="Everyone"> Everybody </input><br>
+
+						<p><strong>Who Should Be Notified:</strong><br>
+						<input type="radio" name="tokens" id="Annie" value="cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d"> Annie </input><br>
+						<input type="radio" name="tokens" id="Everyone" value="cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d"> Everybody </input><br>
+						<p><input type ="submit" value = "Send!" /></p>
+					</form>
+	
+				'''
+
+	if request.method == 'POST':
+		message = request.form["message"]
+		pnType = request.form["type"]
+	
+		if pnType == "ID":
+			tokenString = request.form["tokens"]
+			tokens = [x.strip() for x in tokenString.split(',')]
+			push.pushNotificationById(tokens, message)
+	
+			return ("Notifications succesfully pushed to %s users" %len(tokens))
+	
+		else:
+	
+			return ("Unexpected Notification Method. Did not recognize '%s' as a valid method." %pnType)
+
 
 
 @app.route("/calculate/", methods=['POST'])
