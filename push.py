@@ -1,18 +1,44 @@
-import time, os
+import time, os, db
 from apns import APNs, Frame, Payload
 
 cert_path = os.path.join(os.path.dirname(__file__), 'apns-dev-cert.pem')
 key_path = os.path.join(os.path.dirname(__file__), 'aps-dev-key_decrypted.pem')
 apns = APNs(use_sandbox=True, cert_file=cert_path, key_file=key_path)
-token_hex = 'cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d'
+
 # Send a notification
-def pushNotificationById(tokens, message):
+def pushNotificationById(pnType, message):
 
 	payload = Payload(alert=message, sound="default", badge=1)
 
-	for token in tokens:
-		print(token)
+	if pnType == "Everybody":
+		con = db.createDBConnection()
+		cur = con.cursor()
+		cur.execute("SELECT tokenid FROM users")
+		tokens = cur.fetchall()
+		print(tokens)
+
+		for token in tokens:
+			apns.gateway_server.send_notification(token, payload)
+
+		return len(tokens)
+
+	if pnType == "Welding":
+		con = db.createDBConnection()
+		cur = con.cursor()
+		cur.execute("SELECT tokenid FROM users WHERE interest = Welding")
+		tokens = cur.fetchall()
+		print(tokens)
+
+		for token in tokens:
+			apns.gateway_server.send_notification(token, payload)
+
+
+	if pnType == "Annie":
+		token = 'cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d'
 		apns.gateway_server.send_notification(token, payload)
+
+
+
 
 
 # Send multiple notifications in a single transmission

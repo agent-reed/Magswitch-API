@@ -263,15 +263,11 @@ def sendNotifications():
 
 		return '''
 					<form action = "" method = "post">
-						<p><strong>Notification Message:</strong> <input type ="text" name ="message" /></p>
-						<p><strong>Type:</strong><br>
-						<input type="radio" name="type" id="ID" value="ID"> Token ID </input><br>
-						<input type="radio" name="type" id="Group" value="Group"> Group </input><br>
-						<input type="radio" name="type" id="Everyone" value="Everyone"> Everybody </input><br>
-
+						<p><strong>Notification Message: </strong> <input type ="text" name ="message" /></p>
 						<p><strong>Who Should Be Notified:</strong><br>
-						<input type="radio" name="tokens" id="Annie" value="cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d"> Annie </input><br>
-						<input type="radio" name="tokens" id="Everyone" value="cb0b4f60e1be2f773e76ecdae2022c96e25f9f35a137feac1faa2053c6454e9d"> Everybody </input><br>
+						<input type="radio" name="tokens" id="Annie" value="Annie"> Annie </input><br>
+						<input type="radio" name="tokens" id="Welding" value="Welding"> Welding </input><br>
+						<input type="radio" name="tokens" id="Welding" value="Everybody"> Everybody </input><br>
 						<p><input type ="submit" value = "Send!" /></p>
 					</form>
 	
@@ -279,12 +275,8 @@ def sendNotifications():
 
 	if request.method == 'POST':
 		message = request.form["message"]
-		pnType = request.form["type"]
-	
-		if pnType == "ID":
-			tokenString = request.form["tokens"]
-			tokens = [x.strip() for x in tokenString.split(',')]
-			push.pushNotificationById(tokens, message)
+		tokenString = request.form["tokens"]
+		push.pushNotificationById(tokenString, message)
 	
 			return ("Notifications succesfully pushed to %s users" %len(tokens))
 	
