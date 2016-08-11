@@ -115,7 +115,7 @@ def checkLogin():
 		try:
 			email = request.form['email']
 			psswrd_attempt = request.form['psswrd_attempt']
-			# token = request.form['tokenid']
+			token = request.form['tokenid']
 			print("Email: " + email)
 
 			con = db.createDBConnection()
@@ -136,7 +136,7 @@ def checkLogin():
 				newUser.updateHistory()
 				# return "Welcome!"
 
-				#cur.execute("UPDATE users SET tokenid = %s WHERE email = %s", (token, email))
+				cur.execute("UPDATE users SET tokenid = %s WHERE email = %s", (token, email))
 				con.commit()
 				return jsonify(firstname=newUser.firstName,lastname=newUser.lastName,email=newUser.email,distributor=newUser.distributor, salesperson=newUser.salesperson, admin=newUser.admin, userid=newUser.userid, logincount=newUser.logincount, interest=newUser.interest), 201
 			else:
