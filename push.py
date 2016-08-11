@@ -57,7 +57,7 @@ def pushNotificationByGroups(groups, message):
 			if token[0] != None:
 				print("Will Send %s" %token[0])
 				groupTokens.append(token[0])
-				apns.gateway_server.send_notification(token, payload)
+				apns.gateway_server.send_notification(token[0], payload)
 
 		users = len(groupTokens)
 		return ("Sent notifications to Everybody. (%s users)" %users)
