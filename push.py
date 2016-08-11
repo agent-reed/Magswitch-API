@@ -41,9 +41,47 @@ def pushNotificationById(pnType, message):
 
 		return 1
 
+def pushNotificationByGroups(groups, message):
 
+	groupTokens = []
 
+	payload = Payload(alert=message, sound="default", badge=1)
 
+	if "Everybody" in groups:
+		print("Notifying Everybody")
+		con = db.createDBConnection()
+		cur = con.cursor()
+		cur.execute("SELECT tokenid FROM users")
+		tokens = cur.fetchall()
+		for token in tokens:
+			if token[0] != None:
+				print("Will Send %s" %token[0])
+				groupTokens.append(token[0])
+				#apns.gateway_server.send_notification(token, payload)
+
+		users = len(groupTokens)
+		return ("Sent notifications to Everybody. (%s users)" %users)
+
+	else:
+		con = db.createDBConnection()
+		cur = con.cursor()
+
+		for group in groups:
+			cur.execute("SELECT tokenid FROM users WHERE interest=%s", (group,))
+			tokens = cur.fetchall()
+
+			for token in tokens:
+				if token[0] != None:
+					groupTokens.append(token[0])
+
+		filteredTokens = list(set(groupTokens))
+
+		for token in groupTokens:
+			print("Will Send to %s" %token)
+		 	#apns.gateway_server.send_notification(token, payload)
+		users = len(groupTokens)
+
+		return ("Sent notifications to the folowing groups: \n %s \n [%s users total]" %(groups,users))
 
 # Send multiple notifications in a single transmission
 # frame = Frame()

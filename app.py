@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, session, request, redirect
+from flask import Flask, jsonify, session, request, redirect, render_template
 
 from user import User
 
@@ -259,27 +259,26 @@ def deleteFavorite():
 @app.route("/push/", methods=['GET','POST'])
 def sendNotifications():
 
+	error = None
 	if request.method == 'GET':
 
-		return '''
-					<form action = "" method = "post">
-						<p><strong>Notification Message: </strong> <input type ="text" name ="message" /></p>
-						<p><strong>Who Should Be Notified:</strong><br>
-						<input type="radio" name="tokens" id="Annie" value="Annie"> Annie </input><br>
-						<input type="radio" name="tokens" id="Welding" value="Welding"> Welding </input><br>
-						<input type="radio" name="tokens" id="Welding" value="Everybody"> Everybody </input><br>
-						<p><input type ="submit" value = "Send!" /></p>
-					</form>
-	
-				'''
+		creator = render_template('notificationCreator.html', error = error)
+		return creator
 
 	if request.method == 'POST':
 		message = request.form["message"]
-		tokenString = request.form["tokens"]
-		total = push.pushNotificationById(tokenString, message)
-	
-		return("Sent notifications to %s users." %total)
+		tokenString = request.form.getlist('tokens')
+		username = request.form['username']
+		password = request.form['password']
 
+		error = None
+		if username != 'magswitch' or password != 'pikachu':
+			error = "Bad Credentials. Please try again."
+			return render_template('notificationCreator.html', error=error)
+		else:
+			msg = push.pushNotificationByGroups(tokenString, message)
+	
+		return render_template('notificationCompletion.html', msg=msg)
 
 
 @app.route("/calculate/", methods=['POST'])

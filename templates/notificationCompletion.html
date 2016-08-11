@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<link rel=stylesheet type=text/css href="/../static/style.css">
+<head>
+	<title>Sent!</title>
+</head>
+<body>
+
+	<h1> Sent!
+	<br>
+	<br>
+  	{% if msg %}
+    <h2>{{ msg }}
+  	{% endif %}
+
+<br>
+<form action="/push">
+    <input id= "submit" type="submit" value="Send Another Notification" />
+</form>
+</body>
+</html>

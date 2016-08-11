@@ -1,0 +1,105 @@
+body            { font-family: sans-serif; color:#888; background: #eee; text-align: center; margin-top: 30px;}
+a, h1, h2       { color: #888; text-align: center;}
+h1, h2          { font-family: sans-serif;, serif; margin: 0; text-align: center;}
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+
+.contact-text-field {
+    border-style: solid;
+    border-color: #bbb;
+    border-width: 2px;
+    background-color: #f6f6f6;
+    font-size: 16px;
+    height: 2.6em;
+    margin-top: 45px;
+    text-align: center;
+    min-width: 50%;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.cred-box{
+	display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 5px;
+}
+
+.cred-field {
+    border-style: solid;
+    border-color: #bbb;
+    border-width: 2px;
+    background-color: #f6f6f6;
+    font-size: 16px;
+    height: 2.6em;
+    text-align: center;
+    min-width: 25%;
+}
+
+.error{
+	color: red;
+	text-align: center;
+}
+#submit {
+    background-color: #ffd400;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius:3px;
+    color: #444;
+    font-size: 20px;
+    text-decoration: none;
+    min-width: 40%;
+    cursor: pointer;
+    border-style: solid;
+    border-width: 2px;
+    margin-top: 45px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#submit:hover {
+    border: none;
+    background: #ffd400;
+    border-style: solid;
+    border-width: 2px;
+}
+
+#Annie, #Welding, #Everybody, #Automation, #Woodworking, #Distributors, #NewUsers {
+	display: none;
+	margin-top: 55px;
+}
+
+
+input[type=checkbox] + label {
+  color: #bbb;
+  font-style: italic;
+  background-color: #ddd;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius:3px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 85px;
+  margin-bottom: 85px
+
+} 
+
+
+input[type=checkbox]:checked + label {
+  color: #000;
+  font-style: italic;
+  background-color: #ffd400;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 85px;
+  margin-bottom: 85px;
+  border-style: solid;
+  border-color: 000;
+  border-width: 2px;
+} 
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<link rel=stylesheet type=text/css href="/../static/style.css">
+<head>
+	<title>Send A Notification</title>
+</head>
+<body>
+<h1>Magswitch Push Notification Center</h1>
+
+<form action = "" method = "post">
+	<p>	
+		<input class="contact-text-field" id="message_email" label="false" name="message" placeholder="Type your notification here." required="required" type="text">
+	</p>
+	<p>
+		<br>
+		<br>
+		<strong>Who Should Be Notified:</strong>
+		<br>
+		<br>
+		<input type="checkbox" name="tokens" id="Annie" value="Annie">
+		<label for="Annie">Annie</label>
+		<input type="checkbox" name="tokens" id="Welding" value="Welding">
+		<label for="Welding">Welding</label>
+		<input type="checkbox" name="tokens" id="Automation" value="Automation">
+		<label for="Automation">Automation</label>
+		<input type="checkbox" name="tokens" id="Woodworking" value="Woodworking">
+		<label for="Woodworking">Woodworking</label>
+		<br>
+		<br>
+		<br>
+		<input type="checkbox" name="tokens" id="NewUsers" value="NewUsers">
+		<label for="NewUsers">New Users</label>
+		<input type="checkbox" name="tokens" id="Distributors" value="Distributors">
+		<label for="Distributors">Distributors</label>
+		<input type="checkbox" name="tokens" id="Everybody" value="Everybody">
+		<label for="Everybody">Everybody</label>
+	</p>
+	<br>
+	<p><strong>Please verify yourself:</strong></p>
+  	<div class="cred-box">
+  		<input class="cred-field" id="username" label="false" name="username" placeholder="username" required="required" type="text">
+  		<input class="cred-field" id="password" label="false" name="password" placeholder="password" required="required" type="password">
+  	</div>
+  	{% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  	{% endif %}
+  	<br>
+	<input  type="submit" name="submit" id="submit" value = "Send Notification" /></p>
+</form>
+
+</body>
+</html>
