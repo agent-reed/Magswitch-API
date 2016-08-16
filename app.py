@@ -270,13 +270,14 @@ def sendNotifications():
 		tokenString = request.form.getlist('tokens')
 		username = request.form['username']
 		password = request.form['password']
+		link = request.form['link']
 
 		error = None
 		if username != 'magswitch' or password != 'pikachu':
 			error = "Bad Credentials. Please try again."
 			return render_template('notificationCreator.html', error=error)
 		else:
-			msg = push.pushNotificationByGroups(tokenString, message)
+			msg = push.pushNotificationByGroups(tokenString, message, link)
 	
 		return render_template('notificationCompletion.html', msg=msg)
 

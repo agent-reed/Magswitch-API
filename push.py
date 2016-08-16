@@ -41,11 +41,11 @@ def pushNotificationById(pnType, message):
 
 		return 1
 
-def pushNotificationByGroups(groups, message):
+def pushNotificationByGroups(groups, message, link):
 
 	groupTokens = []
 
-	payload = Payload(alert=message, sound="default", badge=1)
+	payload = Payload(alert=message, sound="default", badge=1, link=link)
 
 	if "Everybody" in groups:
 		print("Notifying Everybody")
