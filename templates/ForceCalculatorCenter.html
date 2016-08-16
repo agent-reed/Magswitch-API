@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Force Calc</title>
+</head>
+<body>
+
+<h1>
+Magswitch Force Calculator
+</h1>
+
+<h3>
+Please enter the desired units.
+</h3>
+	<form>
+		<input type="text" name="thickness" placeholder="Enter Material Thickness">
+		<p>Select Your Material</p>
+		<input type="radio" name="material" value="Steel" checked>50x2<br>
+
+		<input type="radio" name="unit" value="50x2" checked>50x2<br>
+  		<input type="radio" name="unit" value="50x4">50x4<br>
+		<input type="radio" name="unit" value="70x2">70x2
+
+
+		<input type="submit" value="Submit">
+	</form>
+
+
+  	{% if error %}
+    <h2>{{ error }}
+  	{% endif %}
+
+  	{% if result %}
+    <h2>{{ result }}
+  	{% endif %}
+</body>
+</html>

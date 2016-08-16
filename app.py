@@ -284,19 +284,25 @@ def sendNotifications():
 @app.route("/calculate/", methods=['POST'])
 def calculateHoldingForce():
 
-	unit = request.form["unit"]
-	material = request.form["material"]
-	thickness = request.form["thickness"]
+	error = None
+	result = None
+	if request.method == 'GET':
 
-	if thickness < 0:
-		print("Negative thickness given - Cannot Calculate")
-		return "Invalid Input"
+		calcCreator = render_template('ForceCalculatorCenter.html', error = error, result = result)
+		return calcCreator
 
-	holdingForce = calcs.holdingCalc(unit, material, thickness)
+	if request.method == 'POST':
+		unit = request.form["unit"]
+		material = request.form["material"]
+		thickness = request.form["thickness"]
 
-	print("Holding force is %s kg" % holdingForce)
+		if thickness < 0:
+			error = "Negative thickness given - Cannot Calculate"
+			return render_template('ForceCalculatorCenter.html', error = error, result = result)
 
-	return holdingForce
+		result = calcs.holdingCalc(unit, material, thickness)
+		calcCreator = render_template('ForceCalculatorCenter.html', error = error, result = result)
+		return calcCreator
 
 
 if __name__ == '__main__':
