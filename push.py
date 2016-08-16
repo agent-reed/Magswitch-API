@@ -45,7 +45,7 @@ def pushNotificationByGroups(groups, message, link):
 
 	groupTokens = []
 
-	payload = Payload(alert=message, sound="default", badge=1, link=link)
+	payload = Payload(alert=message, sound="default", badge=1, custom={'link':link})
 
 	if "Everybody" in groups:
 		print("Notifying Everybody")
