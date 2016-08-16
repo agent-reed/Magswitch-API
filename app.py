@@ -281,7 +281,7 @@ def sendNotifications():
 		return render_template('notificationCompletion.html', msg=msg)
 
 
-@app.route("/calculate/", methods=['POST'])
+@app.route("/calculate/", methods=['GET','POST'])
 def calculateHoldingForce():
 
 	error = None
