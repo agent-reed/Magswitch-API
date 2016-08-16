@@ -295,6 +295,10 @@ def calculateHoldingForce():
 		unit = request.form["unit"]
 		material = request.form["material"]
 		thickness = request.form["thickness"]
+		mobile = request.form["mobile"]
+
+		if mobile == "True":
+			return calcs.holdingCalc(unit, material, thickness)
 
 		if thickness < 0:
 			error = "Negative thickness given - Cannot Calculate"

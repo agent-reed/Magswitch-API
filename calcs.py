@@ -32,5 +32,3 @@ def holdingCalc(unit, material, thickness):
 
     return str(intForce)
 
-
-
