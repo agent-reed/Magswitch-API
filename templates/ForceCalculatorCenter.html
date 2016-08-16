@@ -9,20 +9,20 @@
 Magswitch Force Calculator
 </h1>
 
-<h3>
-Please enter the desired units.
-</h3>
-	<form>
-		<input type="text" name="thickness" placeholder="Enter Material Thickness">
+<p>
+	Enter your thickness
+</p>
+	<form action = "" method = "post">
+		<input type="text" name="thickness" placeholder="Thickness [mm]">
 		<p>Select Your Material</p>
-		<input type="radio" name="material" value="Steel" checked>50x2<br>
-
+		<input type="radio" name="material" value="Steel" checked>Steel<br>
+		<p>Select Your Tool</p>
 		<input type="radio" name="unit" value="50x2" checked>50x2<br>
   		<input type="radio" name="unit" value="50x4">50x4<br>
 		<input type="radio" name="unit" value="70x2">70x2
 
 
-		<input type="submit" value="Submit">
+		<input type="submit" name="submit" id="submit" value = "Calculate" /></p>
 	</form>
 
 
@@ -31,7 +31,8 @@ Please enter the desired units.
   	{% endif %}
 
   	{% if result %}
-    <h2>{{ result }}
+    <h2>Estimated Holding Force:</h2>
+    <h3>{{ result }} Kg.</h3>
   	{% endif %}
 </body>
 </html>
