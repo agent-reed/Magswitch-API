@@ -52,12 +52,11 @@ def createUser():
 			distributor = request.form['distributor']
 			salesperson = request.form['salesperson']
 			admin = request.form['admin']
-			interest = request.form['interest']
 
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)
 
-			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,interest,hashed)
+			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed)
 
 			return 'Created a User'
 
@@ -255,6 +254,20 @@ def deleteFavorite():
 
 		else:
 			redirect('/login/')
+
+@app.route("/interest/", methods=['POST'])
+def updateInterests():
+
+	userid = request.form['userid']
+	interest = request.form['interest']
+
+	con = db.createDBConnection()
+	cur = con.cursor()
+	cur.execute("UPDATE users SET interest = %s WHERE userid = %s", (interest, userid))
+
+	print "Interest Changed"
+
+	return "Successfully Updated Interests"
 
 @app.route("/push/", methods=['GET','POST'])
 def sendNotifications():
