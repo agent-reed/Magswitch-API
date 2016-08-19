@@ -266,6 +266,8 @@ def updateInterests():
 	cur = con.cursor()
 	cur.execute("UPDATE users SET interest = %s WHERE userid = %s", (interest, userid))
 
+	con.commit()
+
 	print "Interest Changed"
 
 	return "Successfully Updated Interests"
