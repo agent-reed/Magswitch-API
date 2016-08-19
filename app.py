@@ -258,6 +258,7 @@ def deleteFavorite():
 @app.route("/interest/", methods=['POST'])
 def updateInterests():
 
+	print "Request Recieved"
 	userid = request.form['userid']
 	interest = request.form['interest']
 
