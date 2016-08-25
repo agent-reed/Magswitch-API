@@ -1,7 +1,7 @@
 import time, os, db
 from apns import APNs, Frame, Payload
 
-cert_path = os.path.join(os.path.dirname(__file__), 'apns-pro-cert.pem')
+cert_path = os.path.join(os.path.dirname(__file__), 'aps.cer')
 key_path = os.path.join(os.path.dirname(__file__), 'aps-pro-key-decrypted.pem')
 apns = APNs(use_sandbox=False, cert_file=cert_path, key_file=key_path)
 # payload = Payload(alert='Hi Lea', sound="default", badge=1)
