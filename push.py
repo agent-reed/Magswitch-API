@@ -1,8 +1,8 @@
 import time, os, db
 from apns import APNs, Frame, Payload
 
-cert_path = os.path.join(os.path.dirname(__file__), 'apns-pro-cert.pem')
-key_path = os.path.join(os.path.dirname(__file__), 'aps-pro-key-decrypted.pem')
+cert_path = os.path.join(os.path.dirname(__file__), 'apns-dev-cert.pem')
+key_path = os.path.join(os.path.dirname(__file__), 'apns-dev-key.pem')
 apns = APNs(use_sandbox=True, cert_file=cert_path, key_file=key_path)
 # payload = Payload(alert='Hi Lea', sound="default", badge=1)
 # apns.gateway_server.send_notification('55f417c532d0f905b7e1d2617152fc498e7df162eab73f463ca309d4ab81a0c7', payload)
