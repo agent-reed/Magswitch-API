@@ -56,7 +56,7 @@ def createUser():
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)
 
-			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed)
+			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed,psswrd)
 
 			return 'Created a User'
 
