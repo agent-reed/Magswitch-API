@@ -8,7 +8,7 @@ cur = con.cursor()
 #grab the product name with the highest weekly views
 cur.execute("SELECT name FROM products ORDER BY weeklyviews DESC")
 weeklyproducts = cur.fetchmany(size=5)
-
+print weeklyproducts
 #reset the weekly views of the products after grabbing the highest. This script runs once a week.
 cur.execute("UPDATE products SET weeklyviews = 0")
 con.commit()
