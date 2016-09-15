@@ -52,11 +52,12 @@ def createUser():
 			distributor = request.form['distributor']
 			salesperson = request.form['salesperson']
 			admin = request.form['admin']
+			interest = request.form['interest']
 
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)
 
-			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,hashed,hashed)
+			db.addUserToDB(firstName,lastName,email,distributor,salesperson,admin,interest,hashed)
 
 			return 'Created a User'
 
