@@ -53,6 +53,7 @@ def createUser():
 			salesperson = request.form['salesperson']
 			admin = request.form['admin']
 			interest = request.form['interest']
+			print("#### Recieved Interest: %s"%interest)
 
 			psswrd = request.form['psswrd']
 			hashed = hashPassword(psswrd)

@@ -17,7 +17,7 @@ def createDBConnection():
 
 def addUserToDB(firstName,lastName,email,distributor,salesperson,admin,interest,psswrd):
 	con = createDBConnection()
-	print("Connection Created")
+	print("#####Adding interest:  %s   to database"%interest)
 
 	try:
 		cur = con.cursor()
