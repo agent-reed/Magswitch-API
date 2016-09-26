@@ -25,15 +25,18 @@ def getUnitData(unit, type):
 
 	return data
 
-def getDerekData(length,width,thickness,typeOfSteel,condition,orientation):
+def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 
 	wb = openpyxl.load_workbook('Lifting_Calculations.xlsx', data_only=True)
 	sheet = wb.get_sheet_by_name('Sheet Sizes')
 
 	row_indices = []
 
-	for row in sheet.iter_rows(min_row=1, max_col=1, max_row=1025):
-		for cell in row:
-	        print(cell)
+	for row in sheet.iter_rows(min_row=1, max_col=18, max_row=1025):
+		name = str(row[0].value)
+		searchString = "%s\"%s\'%s\'" %(thickness, width, length)
+		if (searchString in name) & (row[17].value == 'Yes'):
+			for item in row:
+				print(item.value)
 
-	return 'yes'
+	return {"PlateWeight":row[6].value,"SWLperMag":int(row[8].value)/4, "SafteyFactor":row[10].value}

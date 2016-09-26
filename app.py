@@ -311,14 +311,18 @@ def calculateHoldingForce():
 		return calcCreator
 
 	if request.method == 'POST':
-		unit = request.form["unit"]
 		material = request.form["material"]
 		thickness = request.form["thickness"]
+		width = request.form["width"]
+		length = request.form["length"]
+		condition = request.form["condition"]
+		orientation = request.form["orientation"]
 		mobile = request.form["mobile"]
 
 		if mobile == "True":
-			return fetchdata.getDerekData(length,width,thickness,typeOfSteel,)
+			calcData = fetchdata.getDerekData(thickness,width,length,material,condition,orientation)
 
+			return jsonify(calcData)
 
 		if thickness < 0:
 			error = "Negative thickness given - Cannot Calculate"
