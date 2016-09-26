@@ -32,7 +32,7 @@ def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 
 	row_indices = []
 
-	for row in sheet.iter_rows(min_row=1, max_col=18, max_row=1025):
+	for row in sheet.iter_rows():
 		name = str(row[0].value)
 		searchString = "%s\"%s\'%s\'" %(thickness, width, length)
 		if (searchString in name) & (row[17].value == 'Yes'):
