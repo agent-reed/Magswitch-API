@@ -303,10 +303,11 @@ def sendNotifications():
 @app.route("/calculate/", methods=['GET','POST'])
 def calculateHoldingForce():
 
+	print("Visted Calculate")
 	error = None
 	result = None
 	if request.method == 'GET':
-
+		print("recieved GET request")
 		calcCreator = render_template('ForceCalculatorCenter.html', error = error, result = result)
 		return calcCreator
 
