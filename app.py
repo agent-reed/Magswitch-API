@@ -6,6 +6,7 @@ import bcrypt
 import db
 import calcs
 import push
+import fetchdata
 
 app = Flask(__name__)
 app.debug = True
