@@ -317,7 +317,8 @@ def calculateHoldingForce():
 		mobile = request.form["mobile"]
 
 		if mobile == "True":
-			return calcs.holdingCalc(unit, material, thickness)
+			return fetchdata.getDerekData(length,width,thickness,typeOfSteel,)
+
 
 		if thickness < 0:
 			error = "Negative thickness given - Cannot Calculate"

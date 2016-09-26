@@ -24,3 +24,16 @@ def getUnitData(unit, type):
 		print("Unknown type of unit data %s" %type)
 
 	return data
+
+def getDerekData(length,width,thickness,typeOfSteel,condition,orientation):
+
+	wb = openpyxl.load_workbook('Lifting_Calculations.xlsx', data_only=True)
+	sheet = wb.get_sheet_by_name('Sheet Sizes')
+
+	row_indices = []
+
+	for row in sheet[1:]
+		if row['A'] == '1/8\"7\'10\'MLAY1000x12':
+			print(row)
+
+	return 'yes'
