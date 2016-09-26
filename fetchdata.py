@@ -32,8 +32,8 @@ def getDerekData(length,width,thickness,typeOfSteel,condition,orientation):
 
 	row_indices = []
 
-	for row in sheet[1:]
-		if row['A'] == '1/8\"7\'10\'MLAY1000x12':
-			print(row)
+	for row in sheet.iter_rows(min_row=1, max_col=1, max_row=1025):
+		for cell in row:
+	        print(cell)
 
 	return 'yes'
