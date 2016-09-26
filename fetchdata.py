@@ -30,7 +30,7 @@ def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 	wb = openpyxl.load_workbook('Lifting_Calculations.xlsx', data_only=True)
 	sheet = wb.get_sheet_by_name('Sheet Sizes')
 
-	row_indices = []
+	tools = []
 
 	for row in sheet.iter_rows():
 		name = str(row[0].value)
@@ -39,4 +39,6 @@ def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 			for item in row:
 				print(item.value)
 
-	return {"Plate Weight":row[4].value,"3:1 SWL Per Magnet":row[6].value, "Saftey Factor":row[10].value, "Number of Magnets":row[8].value, "Destack":row[17].value, "Length":row[3].value, "Width":row[2].value, "Thickness":row[1].value, "Name":row[0].value }
+			tools.append({"Plate Weight":row[4].value,"3:1 SWL Per Magnet":row[6].value, "Saftey Factor":row[10].value, "Number of Magnets":row[8].value, "Destack":row[17].value, "Length":row[3].value, "Width":row[2].value, "Thickness":row[1].value, "Name":row[0].value })
+
+	return tools
