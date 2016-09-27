@@ -322,7 +322,7 @@ def calculateHoldingForce():
 		width = request.form["width"]
 		print("* Width: %s" %width)
 		length = request.form["length"]
-		print("* Length: %s" %lenght)
+		print("* Length: %s" %length)
 		condition = request.form["condition"]
 		print("* Condition: %s" %condition)
 		orientation = request.form["orientation"]
