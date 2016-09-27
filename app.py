@@ -313,15 +313,22 @@ def calculateHoldingForce():
 		return calcCreator
 
 	if request.method == 'POST':
-		print("Recieved POST request")
+
 		material = request.form["material"]
+		print("recieved following request:")
+		print("* Material: %s" %material)
 		thickness = request.form["thickness"]
+		print("* Thickness: %s" %thickness)
 		width = request.form["width"]
+		print("* Width: %s" %width)
 		length = request.form["length"]
+		print("* Length: %s" %lenght)
 		condition = request.form["condition"]
+		print("* Condition: %s" %condition)
 		orientation = request.form["orientation"]
+		print("* Orientation: %s" %orientation)
 		mobile = request.form["mobile"]
-		print(mobile)
+		print("* Mobile: %s" %mobile)
 
 		if mobile == "True":
 			calcData = fetchdata.getDerekData(thickness,width,length,material,condition,orientation)
