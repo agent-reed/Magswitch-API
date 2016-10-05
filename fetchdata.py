@@ -1,4 +1,5 @@
 import openpyxl  # Need this for working with excel docs
+import re
 
 def getUnitData(unit, type):
 
@@ -34,8 +35,9 @@ def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 
 	for row in sheet.iter_rows():
 		name = str(row[0].value)
-		searchString = "%s\"%s\'%s\'" %(thickness, width, length)
-		if (searchString in name) & (row[17].value == 'Yes'):
+		searchString = "(?<!.)%s\"%s\'%s\'" %(thickness, width, length) #Regex101.com is your friend
+		match = re.search(searchString, name)
+		if match & (row[17].value == 'Yes'):
 			for item in row:
 				print(item.value)
 			return {"Plate Weight":row[4].value,"3:1 SWL Per Magnet":row[6].value, "Saftey Factor":row[10].value, "Number of Magnets":row[8].value, "Destack":row[17].value, "Length":row[3].value, "Width":row[2].value, "Thickness":row[1].value, "Name":row[5].value }
