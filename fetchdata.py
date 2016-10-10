@@ -36,6 +36,7 @@ def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 	for row in sheet.iter_rows():
 		name = str(row[0].value)
 		searchString = "(?<!.)" + re.escape(thickness + "\"") + re.escape(width + "\'") + re.escape(length + "\'") #Regex101.com is your friend
+		print(" * Search String: %s" %searchString)
 		match = re.search(searchString, name)
 		if match is not None:
 			for item in row:
