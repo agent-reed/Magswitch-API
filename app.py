@@ -332,7 +332,7 @@ def calculateHoldingForce():
 
 		if mobile == "True":
 			calcData = fetchdata.getDerekData(thickness,width,length,material,condition,orientation)
-
+			print(calcData)
 			return jsonify(calcData)
 
 		if thickness < 0:
