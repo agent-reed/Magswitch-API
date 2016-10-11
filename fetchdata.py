@@ -41,5 +41,9 @@ def getDerekData(thickness, width, length, typeOfSteel, condition,orientation):
 		if match is not None:
 			for item in row:
 				print(item.value)
-			return {"Plate Weight":row[4].value,"3:1 SWL Per Magnet":row[6].value, "Saftey Factor":row[10].value, "Number of Magnets":row[8].value, "Destack":row[17].value, "Length":row[3].value, "Width":row[2].value, "Thickness":row[1].value, "Name":row[5].value }
-	
+			tools.append({"Plate Weight":row[4].value,"3:1 SWL Per Magnet":row[6].value, "Saftey Factor":row[10].value, "Number of Magnets":row[8].value, "Destack":row[17].value, "Length":row[3].value, "Width":row[2].value, "Thickness":row[1].value, "Name":row[5].value })
+	if tools is not None:
+		return tools[-1]
+
+	else:
+		return {"Plate Weight":'None',"3:1 SWL Per Magnet":'None', "Saftey Factor":'None', "Number of Magnets":'None', "Destack":'None', "Length":'None', "Width":'None', "Thickness":'None', "Name":'None'}
