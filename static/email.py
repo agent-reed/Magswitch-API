@@ -6,9 +6,9 @@ con = db.createDBConnection()
 cur = con.cursor()
 
 #grab the product name with the highest weekly views
-cur.execute("SELECT name FROM products ORDER BY weeklyviews DESC")
-weeklyproducts = cur.fetchmany(size=5)
-print weeklyproducts
+cur.execute("SELECT name FROM products ORDER BY weeklyviews DESC LIMIT 1")
+weeklyproduct = cur.fetchone()
+
 #reset the weekly views of the products after grabbing the highest. This script runs once a week.
 cur.execute("UPDATE products SET weeklyviews = 0")
 con.commit()
@@ -50,7 +50,7 @@ print(weeklyLogins)
 
 #each time we run this script we want to post it's results in the stats table and stamp the date on it
 date = time.strftime("%c")
-cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)" ,(lastEntry+1, date, newusers, weeklyLogins, weeklyproducts[0]))
+cur.execute("INSERT INTO stats VALUES(%s, %s, %s, %s, %s)" ,(lastEntry+1, date, newusers, weeklyLogins, weeklyproduct))
 con.commit()
 
-os.system("echo \"Hey everybody! Here are the statistics for the Mobile App over the past week.\n\nMost Viewed Products: \n #1: %s \n #2: %s \n #3: %s \n #4: %s \n #5 %s \n\nNumber of new users: %s \n\nTotal Users: %s \n\nNumber of unique logins: %s\" | mail -s \"Weekly Stat Update\" -t andrew.gentry@colorado.edu agentry@magswitch.com.au"%(weeklyproducts[0][0], weeklyproducts[1][0], weeklyproducts[2][0], weeklyproducts[3][0], weeklyproducts[4][0], newusers, thisHigh[0], weeklyLogins))
+os.system("echo \"Hey everybody! Here are the statistics for the Mobile App over the past week.\n\nMost Viewed Product: %s \n\nNumber of new users: %s \n\nNumber of logins: %s\" | mail -s \"Weekly Stat Update\" agentry@magswitch.com.au"%(weeklyproduct[0], newusers, weeklyLogins))
